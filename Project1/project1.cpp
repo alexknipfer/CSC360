@@ -33,6 +33,9 @@ int main()
 
 void Flight::initializeSeating()
 {
+    // Receives - nothing
+    // Task - initialize all seats to -999
+    // Returns - nothing
   for(int x = 0; x < 10; x++)
   {
     for(int y = 0; y < 3; y++)
@@ -49,6 +52,9 @@ void Flight::initializeSeating()
 
 void Flight::readData(ifstream &inFile)
 {
+    // Receives - input file
+    // Task - read in values from data file
+    // Returns - nothing
   //cout << "HELLO" << endl;
 }
 
@@ -56,13 +62,16 @@ void Flight::readData(ifstream &inFile)
 
 void Flight::printSeatingChart(ofstream &outFile)
 {
+    // Receives - output file
+    // Task - print out seating chart
+    // Returns - nothing
   for(int x = 0; x < 10; x++)
   {
     for(int y = 0; y < 3; y++)
     {
       for(int z = 0; z < 1; z++)
       {
-        outFile << seatingChart[x][y][z];
+        //outFile << seatingChart[x][y][z];
       }
     }
     outFile << endl;
