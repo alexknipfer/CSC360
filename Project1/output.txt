@@ -1,7 +1,7 @@
                Southern Comfort Airlines
  Flight 1010                        FROM: Jackson, Mississippi
                                     TO: Memphis, Tennessee
-1238         -999         1238
+-999         -999         -999
 -999         -999         -999
 -999         -999         -999
 -999         -999         -999

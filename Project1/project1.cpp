@@ -125,7 +125,7 @@ void Flight::readData(ifstream &inFile)
 void Flight::addPassengers()
 {
   seatRow--;
-  bool rowFull = true;
+  int rowCheck = 0;
   
   //**** CHECK SEATING FOR FLIGHT 1010 *****************************************
   
@@ -136,40 +136,21 @@ void Flight::addPassengers()
       if(fl1010L[seatRow][0] == -999)
       {
         fl1010L[seatRow][0] = boardingNumber;
-        rowFull = false;
       }
       
       else if(fl1010L[seatRow][1] == -999)
       {
         fl1010L[seatRow][1] = boardingNumber;
-        rowFull = false;
       }
       
       else if(fl1010R[seatRow] == -999)
       {
         fl1010R[seatRow] = boardingNumber;
-        rowFull = false;
       }
       
-      else if(rowFull == true)
+      else
       {
-        for(int x = 0; x < 10; x++)
-        {
-          for(int y = 0; y < 2; y++)
-          {
-            if(fl1010L[x][y] == -999)
-            {
-              fl1010L[x][y] = boardingNumber;
-              break;
-            }
-          }
-          if(fl1010R[x] == -999)
-          {
-            fl1010R[x] = boardingNumber;
-            break;
-          }
-        }
-        //cout << boardingNumber << endl;
+        cout << boardingNumber << endl;
       }
     }
     
