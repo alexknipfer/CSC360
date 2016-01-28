@@ -104,6 +104,7 @@ void Flight::readData(ifstream &inFile)
 void Flight::addPassengers()
 {
   seatRow--;
+  bool foundAvailableSeat = false;
 
   //**** CHECK SEATING FOR FLIGHT 1010 *****************************************
   
@@ -128,7 +129,18 @@ void Flight::addPassengers()
       
       else
       {
-        cout << boardingNumber << endl;
+        for(int x = 0; x < 10; x++)
+        {
+          for(int y = 0; y < 3; y++)
+          {
+            if(fl1010[x][y] == -999)
+            {
+              fl1010[x][y] = boardingNumber;
+              return;
+            }
+          }
+        }
+        //cout << boardingNumber << endl;
       }
     }
     
@@ -151,7 +163,18 @@ void Flight::addPassengers()
       
       else
       {
-        cout << boardingNumber << endl;
+        for(int x = 0; x < 10; x++)
+        {
+          for(int y = 0; y < 3; y++)
+          {
+            if(fl1010[x][y] == -999)
+            {
+              fl1010[x][y] = boardingNumber;
+              return;
+            }
+          }
+        }
+        //cout << boardingNumber << endl;
       }
     }
     
@@ -174,7 +197,23 @@ void Flight::addPassengers()
       
       else
       {
-        cout << boardingNumber << endl;
+        for(int x = 0; x < 10; x++)
+        {
+          for(int y = 0; y < 3; y++)
+          {
+            if(fl1010[x][y] == -999)
+            {
+              fl1010[x][y] = boardingNumber;
+              foundAvailableSeat = true;
+              return;
+            }
+          }
+        }
+        //cout << boardingNumber << endl;
+        if(foundAvailableSeat == false)
+        {
+          cout << "added to waiting list" << endl;
+        }
       }
       
     }
