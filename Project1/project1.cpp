@@ -14,24 +14,16 @@ class Flight
     void addPassengers();
 
   private:
-    int fl1010L[10][2];
-    int fl1010R[10];
-    int fl1020L[10][2];
-    int fl1020R[10];
-    int fl1030L[10][2];
-    int fl1030R[10];
-    int fl1040L[10][2];
-    int fl1040R[10];
-    
-    int fl1015L[10][2];
-    int fl1015R[10];
-    int fl1025L[10][2];
-    int fl1025R[10];
-    int fl1035L[10][2];
-    int fl1035R[10];
-    int fl1045L[10][2];
-    int fl1045R[10];
-    
+    int fl1010[10][3];
+    int fl1020[10][3];
+    int fl1030[10][3];
+    int fl1040[10][3];
+
+    int fl1015[10][3];
+    int fl1025[10][3];
+    int fl1035[10][3];
+    int fl1045[10][3];
+
     int boardingNumber;
     int flightNumber;
     char section;
@@ -69,31 +61,18 @@ void Flight::initializeSeating()
 
   for(int x = 0; x < 10; x++)
   {
-    for(int y = 0; y < 2; y++)
+    for(int y = 0; y < 3; y++)
     {
-      fl1010L[x][y] = -999;
-      fl1020L[x][y] = -999;
-      fl1030L[x][y] = -999;
-      fl1040L[x][y] = -999;
+      fl1010[x][y] = -999;
+      fl1020[x][y] = -999;
+      fl1030[x][y] = -999;
+      fl1040[x][y] = -999;
 
-      fl1015L[x][y] = -999;
-      fl1025L[x][y] = -999;
-      fl1035L[x][y] = -999;
-      fl1045L[x][y] = -999;
+      fl1015[x][y] = -999;
+      fl1025[x][y] = -999;
+      fl1035[x][y] = -999;
+      fl1045[x][y] = -999;
     }
-  }
-  
-  for(int z = 0; z < 10; z++)
-  {
-    fl1010R[z] = -999;
-    fl1020R[z] = -999;
-    fl1030R[z] = -999;
-    fl1040R[z] = -999;
-    
-    fl1015R[z] = -999;
-    fl1025R[z] = -999;
-    fl1035R[z] = -999;
-    fl1045R[z] = -999;
   }
 }
 
@@ -125,103 +104,26 @@ void Flight::readData(ifstream &inFile)
 void Flight::addPassengers()
 {
   seatRow--;
-  int rowCheck = 0;
-  
+
   //**** CHECK SEATING FOR FLIGHT 1010 *****************************************
   
   if(flightNumber == 1010)
   {
     if(seatColumn == 'L')
     {
-      if(fl1010L[seatRow][0] == -999)
+      if(fl1010[seatRow][0] == -999)
       {
-        fl1010L[seatRow][0] = boardingNumber;
+        fl1010[seatRow][0] = boardingNumber;
       }
       
-      else if(fl1010L[seatRow][1] == -999)
+      else if(fl1010[seatRow][1] == -999)
       {
-        fl1010L[seatRow][1] = boardingNumber;
+        fl1010[seatRow][1] = boardingNumber;
       }
       
-      else if(fl1010R[seatRow] == -999)
+      else if(fl1010[seatRow][2] == -999)
       {
-        fl1010R[seatRow] = boardingNumber;
-      }
-      
-      else
-      {
-        cout << boardingNumber << endl;
-      }
-    }
-    
-    else if(seatColumn == 'M')
-    {
-      if(fl1010L[seatRow][1] == -999)
-      {
-        fl1010L[seatRow][1] = boardingNumber;
-      }
-      
-      else if(fl1010L[seatRow][0] == -999)
-      {
-        fl1010L[seatRow][0] = boardingNumber;
-      }
-      
-      else if(fl1010R[seatRow] == -999)
-      {
-        fl1010R[seatRow] = boardingNumber;
-      }
-      
-      else
-      {
-        cout << boardingNumber << endl;
-      }
-    }
-    
-    else if(seatColumn == 'R')
-    {
-      if(fl1010R[seatRow] == -999)
-      {
-        fl1010R[seatRow] = boardingNumber;
-      }
-      
-      else if(fl1010L[seatRow][0] == -999)
-      {
-        fl1010L[seatRow][0] = boardingNumber;
-      }
-      
-      else if(fl1010L[seatRow][1] == -999)
-      {
-        fl1010L[seatRow][1] = boardingNumber;
-      }
-      
-      else
-      {
-        cout << boardingNumber << endl;
-      }
-      
-    }
-  }
-
-  
-  //******* CHECK SEATING FOR FLIGHT 1015 **************************************
-  
-  else if(flightNumber == 1015)
-  {
-    if(seatColumn == 'L')
-    {
-      if(fl1015L[seatRow][0] == -999)
-      {
-        fl1015L[seatRow][0] = boardingNumber;
-      }
-      
-      else if(fl1015L[seatRow][1] == -999)
-      {
-        fl1015L[seatRow][1] = boardingNumber;
-      }
-      
-      else if(fl1015R[seatRow] == -999)
-      {
-        fl1010R[seatRow] = boardingNumber;
+        fl1010[seatRow][2] = boardingNumber;
       }
       
       else
@@ -232,94 +134,19 @@ void Flight::addPassengers()
     
     else if(seatColumn == 'M')
     {
-      if(fl1015L[seatRow][1] == -999)
+      if(fl1010[seatRow][1] == -999)
       {
-        fl1015L[seatRow][1] = boardingNumber;
+        fl1010[seatRow][1] = boardingNumber;
       }
       
-      else if(fl1015L[seatRow][0] == -999)
+      else if(fl1010[seatRow][0] == -999)
       {
-        fl1015L[seatRow][0] = boardingNumber;
+        fl1010[seatRow][0] = boardingNumber;
       }
       
-      else if(fl1015R[seatRow] == -999)
+      else if(fl1010[seatRow][2] == -999)
       {
-        fl1015R[seatRow] = boardingNumber;
-      }
-      
-      else
-      {
-        cout << boardingNumber << endl;
-      }
-    }
-    
-    else if(seatColumn == 'R')
-    {
-      if(fl1015R[seatRow] == -999)
-      {
-        fl1015R[seatRow] = boardingNumber;
-      }
-      
-      else if(fl1015L[seatRow][0] == -999)
-      {
-        fl1015L[seatRow][0] = boardingNumber;
-      }
-      
-      else if(fl1015L[seatRow][1] == -999)
-      {
-        fl1015L[seatRow][1] = boardingNumber;
-      }
-      
-      else
-      {
-        cout << boardingNumber << endl;  
-      }
-      
-    }
-  }
- 
-  //******* CHECK SEATING FOR FLIGHT 1020 **************************************
-  
-  else if(flightNumber == 1020)
-  {
-    if(seatColumn == 'L')
-    {
-      if(fl1020L[seatRow][0] == -999)
-      {
-        fl1020L[seatRow][0] = boardingNumber;
-      }
-      
-      else if(fl1020L[seatRow][1] == -999)
-      {
-        fl1020L[seatRow][1] = boardingNumber;
-      }
-      
-      else if(fl1020R[seatRow] == -999)
-      {
-        fl1020R[seatRow] = boardingNumber;
-      }
-      
-      else
-      {
-        cout << boardingNumber << endl;
-      }
-    }
-    
-    else if(seatColumn == 'M')
-    {
-      if(fl1020L[seatRow][1] == -999)
-      {
-        fl1020L[seatRow][1] = boardingNumber;
-      }
-      
-      else if(fl1020L[seatRow][0] == -999)
-      {
-        fl1020L[seatRow][0] = boardingNumber;
-      }
-      
-      else if(fl1020R[seatRow] == -999)
-      {
-        fl1020R[seatRow] = boardingNumber;
+        fl1010[seatRow][2] = boardingNumber;
       }
       
       else
@@ -330,399 +157,24 @@ void Flight::addPassengers()
     
     else if(seatColumn == 'R')
     {
-      if(fl1020R[seatRow] == -999)
+      if(fl1010[seatRow][2] == -999)
       {
-        fl1020R[seatRow] = boardingNumber;
+        fl1010[seatRow][2] = boardingNumber;
       }
       
-      else if(fl1020L[seatRow][0] == -999)
+      else if(fl1010[seatRow][0] == -999)
       {
-        fl1020L[seatRow][0] = boardingNumber;
+        fl1010[seatRow][0] = boardingNumber;
       }
       
-      else if(fl1020L[seatRow][1] == -999)
+      else if(fl1010[seatRow][1] == -999)
       {
-        fl1020L[seatRow][1] = boardingNumber;
-      }
-      
-      else
-      {
-        cout << boardingNumber << endl;  
-      }
-      
-    }
-  }
-  
-  //******* CHECK SEATING FOR FLIGHT 1025 **************************************
-  
-  else if(flightNumber == 1025)
-  {
-    if(seatColumn == 'L')
-    {
-      if(fl1025L[seatRow][0] == -999)
-      {
-        fl1025L[seatRow][0] = boardingNumber;
-      }
-      
-      else if(fl1025L[seatRow][1] == -999)
-      {
-        fl1025L[seatRow][1] = boardingNumber;
-      }
-      
-      else if(fl1025R[seatRow] == -999)
-      {
-        fl1025R[seatRow] = boardingNumber;
+        fl1010[seatRow][1] = boardingNumber;
       }
       
       else
       {
         cout << boardingNumber << endl;
-      }
-    }
-    
-    else if(seatColumn == 'M')
-    {
-      if(fl1025L[seatRow][1] == -999)
-      {
-        fl1025L[seatRow][1] = boardingNumber;
-      }
-      
-      else if(fl1025L[seatRow][0] == -999)
-      {
-        fl1025L[seatRow][0] = boardingNumber;
-      }
-      
-      else if(fl1025R[seatRow] == -999)
-      {
-        fl1025R[seatRow] = boardingNumber;
-      }
-      
-      else
-      {
-        cout << boardingNumber << endl;
-      }
-    }
-    
-    else if(seatColumn == 'R')
-    {
-      if(fl1025R[seatRow] == -999)
-      {
-        fl1025R[seatRow] = boardingNumber;
-      }
-      
-      else if(fl1025L[seatRow][0] == -999)
-      {
-        fl1025L[seatRow][0] = boardingNumber;
-      }
-      
-      else if(fl1025L[seatRow][1] == -999)
-      {
-        fl1025L[seatRow][1] = boardingNumber;
-      }
-      
-      else
-      {
-        cout << boardingNumber << endl;  
-      }
-      
-    }
-  }
-  
-  //******* CHECK SEATING FOR FLIGHT 1030 **************************************
-
-  else if(flightNumber == 1030)
-  {
-    if(seatColumn == 'L')
-    {
-      if(fl1030L[seatRow][0] == -999)
-      {
-        fl1030L[seatRow][0] = boardingNumber;
-      }
-      
-      else if(fl1030L[seatRow][1] == -999)
-      {
-        fl1030L[seatRow][1] = boardingNumber;
-      }
-      
-      else if(fl1030R[seatRow] == -999)
-      {
-        fl1030R[seatRow] = boardingNumber;
-      }
-      
-      else
-      {
-        cout << boardingNumber << endl;
-      }
-    }
-    
-    else if(seatColumn == 'M')
-    {
-      if(fl1030L[seatRow][1] == -999)
-      {
-        fl1030L[seatRow][1] = boardingNumber;
-      }
-      
-      else if(fl1030L[seatRow][0] == -999)
-      {
-        fl1030L[seatRow][0] = boardingNumber;
-      }
-      
-      else if(fl1030R[seatRow] == -999)
-      {
-        fl1030R[seatRow] = boardingNumber;
-      }
-      
-      else
-      {
-        cout << boardingNumber << endl;
-      }
-    }
-    
-    else if(seatColumn == 'R')
-    {
-      if(fl1030R[seatRow] == -999)
-      {
-        fl1030R[seatRow] = boardingNumber;
-      }
-      
-      else if(fl1030L[seatRow][0] == -999)
-      {
-        fl1030L[seatRow][0] = boardingNumber;
-      }
-      
-      else if(fl1030L[seatRow][1] == -999)
-      {
-        fl1030L[seatRow][1] = boardingNumber;
-      }
-      
-      else
-      {
-        cout << boardingNumber << endl;  
-      }
-      
-    }
-  }
-  
-  //******* CHECK SEATING FOR FLIGHT 1035 **************************************
-
-  else if(flightNumber == 1035)
-  {
-    if(seatColumn == 'L')
-    {
-      if(fl1035L[seatRow][0] == -999)
-      {
-        fl1035L[seatRow][0] = boardingNumber;
-      }
-      
-      else if(fl1035L[seatRow][1] == -999)
-      {
-        fl1035L[seatRow][1] = boardingNumber;
-      }
-      
-      else if(fl1035R[seatRow] == -999)
-      {
-        fl1035R[seatRow] = boardingNumber;
-      }
-      
-      else
-      {
-        cout << boardingNumber << endl;
-      }
-    }
-    
-    else if(seatColumn == 'M')
-    {
-      if(fl1035L[seatRow][1] == -999)
-      {
-        fl1035L[seatRow][1] = boardingNumber;
-      }
-      
-      else if(fl1035L[seatRow][0] == -999)
-      {
-        fl1035L[seatRow][0] = boardingNumber;
-      }
-      
-      else if(fl1035R[seatRow] == -999)
-      {
-        fl1035R[seatRow] = boardingNumber;
-      }
-      
-      else
-      {
-        cout << boardingNumber << endl;
-      }
-    }
-    
-    else if(seatColumn == 'R')
-    {
-      if(fl1035R[seatRow] == -999)
-      {
-        fl1035R[seatRow] = boardingNumber;
-      }
-      
-      else if(fl1035L[seatRow][0] == -999)
-      {
-        fl1035L[seatRow][0] = boardingNumber;
-      }
-      
-      else if(fl1035L[seatRow][1] == -999)
-      {
-        fl1035L[seatRow][1] = boardingNumber;
-      }
-      
-      else
-      {
-        cout << boardingNumber << endl;  
-      }
-      
-    }
-  }
-  
-  //******* CHECK SEATING FOR FLIGHT 1040 **************************************
-  
-  else if(flightNumber == 1040)
-  {
-    if(seatColumn == 'L')
-    {
-      if(fl1040L[seatRow][0] == -999)
-      {
-        fl1040L[seatRow][0] = boardingNumber;
-      }
-      
-      else if(fl1040L[seatRow][1] == -999)
-      {
-        fl1040L[seatRow][1] = boardingNumber;
-      }
-      
-      else if(fl1040R[seatRow] == -999)
-      {
-        fl1040R[seatRow] = boardingNumber;
-      }
-      
-      else
-      {
-        cout << boardingNumber << endl;
-      }
-    }
-    
-    else if(seatColumn == 'M')
-    {
-      if(fl1040L[seatRow][1] == -999)
-      {
-        fl1040L[seatRow][1] = boardingNumber;
-      }
-      
-      else if(fl1040L[seatRow][0] == -999)
-      {
-        fl1040L[seatRow][0] = boardingNumber;
-      }
-      
-      else if(fl1040R[seatRow] == -999)
-      {
-        fl1040R[seatRow] = boardingNumber;
-      }
-      
-      else
-      {
-        cout << boardingNumber << endl;
-      }
-    }
-    
-    else if(seatColumn == 'R')
-    {
-      if(fl1040R[seatRow] == -999)
-      {
-        fl1040R[seatRow] = boardingNumber;
-      }
-      
-      else if(fl1040L[seatRow][0] == -999)
-      {
-        fl1040L[seatRow][0] = boardingNumber;
-      }
-      
-      else if(fl1040L[seatRow][1] == -999)
-      {
-        fl1040L[seatRow][1] = boardingNumber;
-      }
-      
-      else
-      {
-        cout << boardingNumber << endl;  
-      }
-      
-    }
-  }
-  
-  //******* CHECK SEATING FOR FLIGHT 1045 **************************************
-  
-  else if(flightNumber == 1045)
-  {
-    if(seatColumn == 'L')
-    {
-      if(fl1045L[seatRow][0] == -999)
-      {
-        fl1045L[seatRow][0] = boardingNumber;
-      }
-      
-      else if(fl1045L[seatRow][1] == -999)
-      {
-        fl1045L[seatRow][1] = boardingNumber;
-      }
-      
-      else if(fl1045R[seatRow] == -999)
-      {
-        fl1045R[seatRow] = boardingNumber;
-      }
-      
-      else
-      {
-        cout << boardingNumber << endl;
-      }
-    }
-    
-    else if(seatColumn == 'M')
-    {
-      if(fl1045L[seatRow][1] == -999)
-      {
-        fl1045L[seatRow][1] = boardingNumber;
-      }
-      
-      else if(fl1045L[seatRow][0] == -999)
-      {
-        fl1045L[seatRow][0] = boardingNumber;
-      }
-      
-      else if(fl1045R[seatRow] == -999)
-      {
-        fl1045R[seatRow] = boardingNumber;
-      }
-      
-      else
-      {
-        cout << boardingNumber << endl;
-      }
-    }
-    
-    else if(seatColumn == 'R')
-    {
-      if(fl1045R[seatRow] == -999)
-      {
-        fl1045R[seatRow] = boardingNumber;
-      }
-      
-      else if(fl1045L[seatRow][0] == -999)
-      {
-        fl1045L[seatRow][0] = boardingNumber;
-      }
-      
-      else if(fl1045L[seatRow][1] == -999)
-      {
-        fl1045L[seatRow][1] = boardingNumber;
-      }
-      
-      else
-      {
-        cout << boardingNumber << endl;  
       }
       
     }
@@ -737,18 +189,15 @@ void Flight::printSeatingChart(ofstream &outFile, int flightNumber)
     // Task - print out seating chart
     // Returns - nothing
     
-    int rightSeatCount = 0;
-    
     if(flightNumber == 1010)
     {
       for(int x = 0; x < 10; x++)
       {
-        for(int y = 0; y < 2; y++)
+        for(int y = 0; y < 3; y++)
         {
-          outFile << fl1010L[x][y] << "         ";
+          outFile << fl1010[x][y] << "         ";
         }
-          outFile << fl1010R[rightSeatCount] << endl;
-          rightSeatCount++;
+        outFile << endl;
       }
     }
 }
