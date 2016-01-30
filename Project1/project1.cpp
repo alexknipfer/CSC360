@@ -8,12 +8,12 @@ using namespace std;
 class Flight
 {
   public:
-    void readData(ifstream &);
+    void readData(ifstream &, ofstream &);
     void initializeSeating();
-    void printSeatingChart(ofstream &, int);
-    void addPassengers();
+    void printSeatingChart(ofstream &, int [][3]);
+    void addPassengers(int [][3]);
 
-  private:
+  public:
     int fl1010[10][3];
     int fl1020[10][3];
     int fl1030[10][3];
@@ -24,6 +24,7 @@ class Flight
     int fl1035[10][3];
     int fl1045[10][3];
 
+  private:
     int boardingNumber;
     int flightNumber;
     char section;
@@ -39,16 +40,18 @@ int main()
   Flight myFlight;
 
   ofstream outputFile("output.txt");
-  ifstream inputFile("testdata.txt");
+  ifstream inputFile("data.txt");
 
   myFlight.initializeSeating();
-  myFlight.readData(inputFile);
+  myFlight.readData(inputFile, outputFile);
   
   outputFile << "               Southern Comfort Airlines" << endl;
   outputFile << " Flight 1010                        FROM: Jackson, Mississippi" << endl;
   outputFile << "                                    TO: Memphis, Tennessee" << endl;
   
-  myFlight.printSeatingChart(outputFile, 1010);
+  myFlight.printSeatingChart(outputFile, myFlight.fl1010);
+
+  
 }
 
 //************************************************
@@ -78,7 +81,7 @@ void Flight::initializeSeating()
 
 //******************************************************************************
 
-void Flight::readData(ifstream &inFile)
+void Flight::readData(ifstream &inFile, ofstream &outputFile)
 {
     // Receives - input file
     // Task - read in values from data file
@@ -93,150 +96,232 @@ void Flight::readData(ifstream &inFile)
       inFile >> seatRow;
       inFile >> seatColumn;
       
-      addPassengers();
-      
+      switch(flightNumber)
+      {
+        case 1010: 
+          addPassengers(fl1010);
+          break;
+          
+        case 1015: 
+          addPassengers(fl1015);
+          break;
+          
+        case 1020: 
+          addPassengers(fl1020);
+          break;
+          
+        case 1025: 
+          addPassengers(fl1025);
+          break;
+          
+        case 1030: 
+          addPassengers(fl1030);
+          break;
+          
+        case 1035: 
+          addPassengers(fl1035);
+          break;
+          
+        case 1040: 
+          addPassengers(fl1040);
+          break;
+          
+        case 1045: 
+          addPassengers(fl1045);
+          break;
+      }
       inFile >> boardingNumber;
     }
 }
 
 //******************************************************************************
 
-void Flight::addPassengers()
+void Flight::addPassengers(int seatingChart[10][3])
 {
   seatRow--;
   bool foundAvailableSeat = false;
 
-  //**** CHECK SEATING FOR FLIGHT 1010 *****************************************
-  
-  if(flightNumber == 1010)
+  if(seatColumn == 'L')
   {
-    if(seatColumn == 'L')
+    if(seatingChart[seatRow][0] == -999)
     {
-      if(fl1010[seatRow][0] == -999)
-      {
-        fl1010[seatRow][0] = boardingNumber;
-      }
-      
-      else if(fl1010[seatRow][1] == -999)
-      {
-        fl1010[seatRow][1] = boardingNumber;
-      }
-      
-      else if(fl1010[seatRow][2] == -999)
-      {
-        fl1010[seatRow][2] = boardingNumber;
-      }
-      
-      else
-      {
-        for(int x = 0; x < 10; x++)
-        {
-          for(int y = 0; y < 3; y++)
-          {
-            if(fl1010[x][y] == -999)
-            {
-              fl1010[x][y] = boardingNumber;
-              return;
-            }
-          }
-        }
-        //cout << boardingNumber << endl;
-      }
+      seatingChart[seatRow][0] = boardingNumber;
     }
     
-    else if(seatColumn == 'M')
+    else if(seatingChart[seatRow][1] == -999)
     {
-      if(fl1010[seatRow][1] == -999)
-      {
-        fl1010[seatRow][1] = boardingNumber;
-      }
-      
-      else if(fl1010[seatRow][0] == -999)
-      {
-        fl1010[seatRow][0] = boardingNumber;
-      }
-      
-      else if(fl1010[seatRow][2] == -999)
-      {
-        fl1010[seatRow][2] = boardingNumber;
-      }
-      
-      else
-      {
-        for(int x = 0; x < 10; x++)
-        {
-          for(int y = 0; y < 3; y++)
-          {
-            if(fl1010[x][y] == -999)
-            {
-              fl1010[x][y] = boardingNumber;
-              return;
-            }
-          }
-        }
-        //cout << boardingNumber << endl;
-      }
+      seatingChart[seatRow][1] = boardingNumber;
     }
     
-    else if(seatColumn == 'R')
+    else if(seatingChart[seatRow][2] == -999)
     {
-      if(fl1010[seatRow][2] == -999)
+      seatingChart[seatRow][2] = boardingNumber;
+    }
+    
+    else
+    {
+      if(section == 'C')
       {
-        fl1010[seatRow][2] = boardingNumber;
-      }
-      
-      else if(fl1010[seatRow][0] == -999)
-      {
-        fl1010[seatRow][0] = boardingNumber;
-      }
-      
-      else if(fl1010[seatRow][1] == -999)
-      {
-        fl1010[seatRow][1] = boardingNumber;
-      }
-      
-      else
-      {
-        for(int x = 0; x < 10; x++)
+        for(int x = 3; x < 10; x++)
         {
           for(int y = 0; y < 3; y++)
           {
-            if(fl1010[x][y] == -999)
+            if(seatingChart[x][y] == -999)
             {
-              fl1010[x][y] = boardingNumber;
+              seatingChart[x][y] = boardingNumber;
               foundAvailableSeat = true;
               return;
             }
           }
         }
-        //cout << boardingNumber << endl;
-        if(foundAvailableSeat == false)
+      }
+      
+      else if(section == 'F')
+      {
+        for(int x = 0; x < 3; x++)
         {
-          cout << "added to waiting list" << endl;
+          for(int y = 0; y < 3; y++)
+          {
+            if(seatingChart[x][y] == -999)
+            {
+              seatingChart[x][y] = boardingNumber;
+              foundAvailableSeat = true;
+              return;
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  else if(seatColumn == 'M')
+  {
+    if(seatingChart[seatRow][1] == -999)
+    {
+      seatingChart[seatRow][1] = boardingNumber;
+    }
+    
+    else if(seatingChart[seatRow][0] == -999)
+    {
+      seatingChart[seatRow][0] = boardingNumber;
+    }
+    
+    else if(seatingChart[seatRow][2] == -999)
+    {
+      seatingChart[seatRow][2] = boardingNumber;
+    }
+    
+    else
+    {
+      if(section == 'C')
+      {
+        for(int x = 3; x < 10; x++)
+        {
+          for(int y = 0; y < 3; y++)
+          {
+            if(seatingChart[x][y] == -999)
+            {
+              seatingChart[x][y] = boardingNumber;
+              foundAvailableSeat = true;
+              return;
+            }
+          }
         }
       }
       
+      else if(section == 'F')
+      {
+        for(int x = 0; x < 3; x++)
+        {
+          for(int y = 0; y < 3; y++)
+          {
+            if(seatingChart[x][y] == -999)
+            {
+              seatingChart[x][y] = boardingNumber;
+              foundAvailableSeat = true;
+              return;
+            }
+          }
+        }
+      }
     }
+  }
+  
+  else if(seatColumn == 'R')
+  {
+    if(seatingChart[seatRow][2] == -999)
+    {
+      seatingChart[seatRow][2] = boardingNumber;
+    }
+    
+    else if(seatingChart[seatRow][0] == -999)
+    {
+      seatingChart[seatRow][0] = boardingNumber;
+    }
+    
+    else if(seatingChart[seatRow][1] == -999)
+    {
+      seatingChart[seatRow][1] = boardingNumber;
+    }
+    
+    else
+    {
+      if(section == 'C')
+      {
+        for(int x = 3; x < 10; x++)
+        {
+          for(int y = 0; y < 3; y++)
+          {
+            if(seatingChart[x][y] == -999)
+            {
+              seatingChart[x][y] = boardingNumber;
+              foundAvailableSeat = true;
+              return;
+            }
+          }
+        }
+      }
+      
+      else if(section == 'F')
+      {
+        for(int x = 0; x < 3; x++)
+        {
+          for(int y = 0; y < 3; y++)
+          {
+            if(seatingChart[x][y] == -999)
+            {
+              seatingChart[x][y] = boardingNumber;
+              foundAvailableSeat = true;
+              return;
+            }
+          }
+        }
+      }
+      if(foundAvailableSeat == false)
+      {
+        cout << "added to waiting list" << endl;
+      }
+    }
+    
   }
 }
 
 //******************************************************************************
 
-void Flight::printSeatingChart(ofstream &outFile, int flightNumber)
+void Flight::printSeatingChart(ofstream &outFile, int seatingChart[10][3])
 {
     // Receives - output file
     // Task - print out seating chart
     // Returns - nothing
     
-    if(flightNumber == 1010)
+    for(int x = 0; x < 10; x++)
     {
-      for(int x = 0; x < 10; x++)
+      for(int y = 0; y < 3; y++)
       {
-        for(int y = 0; y < 3; y++)
-        {
-          outFile << fl1010[x][y] << "         ";
-        }
-        outFile << endl;
+        outFile << seatingChart[x][y] << "         ";
       }
+      outFile << endl;
     }
+    outFile << endl;
+    outFile << endl;
 }
