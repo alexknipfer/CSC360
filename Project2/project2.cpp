@@ -97,6 +97,30 @@ void LinkedListClass::InsertNode(NodeType Node)
   
   else
   {
-    
+    newPtr -> firstName = Node.firstName;
+    newPtr -> lastName = Node.lastName;
+    newPtr -> address = Node.address;
+    newPtr -> city = Node.city;
+    newPtr -> state = Node.state;
+    newPtr -> zipCode = Node.zipCode;
   }
+  
+  while((CurrentPtr != NULL) && (newPtr->firstName > CurrentPtr->firstName) && (newPtr->lastName > CurrentPtr->lastName))
+  {
+    PreviousPtr -> firstName = Node.firstName;
+    PreviousPtr -> lastName = Node.lastName;
+    PreviousPtr -> address = Node.address;
+    PreviousPtr -> city = Node.city;
+    PreviousPtr -> state = Node.state;
+    PreviousPtr -> zipCode = Node.zipCode;
+  }
+  
+  if(CurrentPtr != NULL)
+  {
+    if(PreviousPtr == NULL)
+    {
+      //some stuff
+    }
+  }
+  
 }
