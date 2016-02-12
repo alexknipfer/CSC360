@@ -20,6 +20,12 @@
 //*    USER DEFINED                                                            *
 //*     MODULES:       : printHeader - print program header                    *
 //*                      printFooter - print program footer                    *
+//*                      processPassengers - reads in passenger data from data *
+//*                                          file                              *
+//*                      initializeSeating - sets all seats to empty (-999)    *
+//*                      addPassengers - adds passengers to seating chart      *
+//*                      printSeatingChart - prints seating chart              *
+//*                      printWaitingList - prints waiting list                *
 //******************************************************************************
 
 #include <iostream>
@@ -382,7 +388,7 @@ void FlightClass::addPassengers(int seatingChart[10][3], vector<int> &waitingLis
       if(section == 'C')
       {
           //start at 3 where coach seating begins and check for empty seats
-        for(int x = 3; x < 10; x++)
+        for(int x = 3; x < seatRow; x++)
         {
           for(int y = 0; y < 3; y++)
           {
@@ -406,7 +412,7 @@ void FlightClass::addPassengers(int seatingChart[10][3], vector<int> &waitingLis
       else if(section == 'F')
       {
           //go through first three rows which is first class seating
-        for(int x = 0; x < 3; x++)
+        for(int x = 0; x < seatRow; x++)
         {
           for(int y = 0; y < 3; y++)
           {
@@ -468,7 +474,7 @@ void FlightClass::addPassengers(int seatingChart[10][3], vector<int> &waitingLis
       if(section == 'C')
       {
           //go through rows 4 - 10 of seats (coach seating)
-        for(int x = 3; x < 10; x++)
+        for(int x = 3; x < seatRow; x++)
         {
           for(int y = 0; y < 3; y++)
           {
@@ -492,7 +498,7 @@ void FlightClass::addPassengers(int seatingChart[10][3], vector<int> &waitingLis
       else if(section == 'F')
       {
           //go through first 3 rows to check for empty seats
-        for(int x = 0; x < 3; x++)
+        for(int x = 0; x < seatRow; x++)
         {
           for(int y = 0; y < 3; y++)
           {
@@ -554,7 +560,7 @@ void FlightClass::addPassengers(int seatingChart[10][3], vector<int> &waitingLis
       if(section == 'C')
       {
           //check seats in rows 4 - 10 for coach seating
-        for(int x = 3; x < 10; x++)
+        for(int x = 3; x < seatRow; x++)
         {
           for(int y = 0; y < 3; y++)
           {
@@ -578,7 +584,7 @@ void FlightClass::addPassengers(int seatingChart[10][3], vector<int> &waitingLis
       else if(section == 'F')
       {
           //check seats in first 3 rows
-        for(int x = 0; x < 3; x++)
+        for(int x = 0; x < seatRow; x++)
         {
           for(int y = 0; y < 3; y++)
           {
@@ -644,6 +650,8 @@ void FlightClass::printWaitingList(ofstream &outputFile, vector<int> &waitingLis
     
     //keep sum to see if there is an existing waiting list
   int sum = 0;
+  
+  int newLine = 0;
 
     //go through waiting list vector
   for(int i=0; i < waitingList.size(); i++) 
@@ -651,8 +659,18 @@ void FlightClass::printWaitingList(ofstream &outputFile, vector<int> &waitingLis
       //increment sum because there is values in the waiting list
     sum++;
     
+      //print waiting list on new linen if too long
+    newLine += 1;
+    
       //print the boarding number in the waiting list
     outputFile << "    " << waitingList[i] << " ";
+    
+    if(newLine == 5)
+    {
+      outputFile << endl;
+      newLine = 0;
+    }
+
   }
   
     //drop to next line
@@ -666,7 +684,7 @@ void FlightClass::printWaitingList(ofstream &outputFile, vector<int> &waitingLis
   }
   
     //create proper spacing between flight output
-  for(int x = 0; x < 5; x++)
+  for(int x = 0; x < 50; x++)
   {
     outputFile << endl;
   }
