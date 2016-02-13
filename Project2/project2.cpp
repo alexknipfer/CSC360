@@ -14,7 +14,7 @@ struct NodeType
   string state;
   string zipCode;
   
-  NodeType *NodePtr;
+  NodeType *next;
 };
 
 class LinkedListClass
@@ -22,9 +22,14 @@ class LinkedListClass
   public:
   LinkedListClass();
     void InsertNode(NodeType);
+    void InsertAsFirstElement(NodeType);
+    void PrintList();
+    bool isEmpty();
 
   private:
-    NodeType *StartPtr;
+    NodeType *head;
+    NodeType *last;
+    NodeType *current;
 };
 
 //******************************************************************************
@@ -75,52 +80,108 @@ int main()
       //read in next transaction type
     inputFile >> transactionType;
   }
+  LinkedList.PrintList();
 }
 
 //******************************************************************************
 
 LinkedListClass::LinkedListClass()
 {
-  StartPtr = NULL;
+  head = NULL;
+  last = NULL;
 }
 
-void LinkedListClass::InsertNode(NodeType Node)
+//******************************************************************************
+
+bool LinkedListClass::isEmpty()
 {
-  NodeType *newPtr, *PreviousPtr, *CurrentPtr;
-  
-  newPtr = new(NodeType);
-  
-  if(newPtr == NULL)
+  if(head == NULL)
   {
-    cout << "No memory available" << endl;
+    return true;
   }
   
   else
   {
-    newPtr -> firstName = Node.firstName;
-    newPtr -> lastName = Node.lastName;
-    newPtr -> address = Node.address;
-    newPtr -> city = Node.city;
-    newPtr -> state = Node.state;
-    newPtr -> zipCode = Node.zipCode;
+    return false;
+  }
+}
+
+//******************************************************************************
+
+void LinkedListClass::InsertAsFirstElement(NodeType Node)
+{
+  NodeType *temp = new(NodeType);
+  temp -> firstName = Node.firstName;
+  temp -> lastName = Node.lastName;
+  temp -> address = Node.address;
+  temp -> city = Node.city;
+  temp -> state = Node.state;
+  temp -> zipCode = Node.zipCode;
+  temp -> next = NULL;
+  head = temp;
+  last = temp;
+}
+
+//******************************************************************************
+
+void LinkedListClass::InsertNode(NodeType Node)
+{
+  current = head;
+  string tempFirst;
+  
+   if(isEmpty())
+   {
+     InsertAsFirstElement(Node);
+   }
+   
+   else
+   {
+      NodeType *temp = new(NodeType);
+      temp -> firstName = Node.firstName;
+      temp -> lastName = Node.lastName;
+      temp -> address = Node.address;
+      temp -> city = Node.city;
+      temp -> state = Node.state;
+      temp -> zipCode = Node.zipCode;
+      
+      while(current != NULL)
+      {
+        if(temp->firstName < current->firstName)
+            {
+                    //Swap first names.
+                tempFirst = current->firstName;
+                current->firstName = temp->firstName;
+                temp->firstName = tempFirst;
+            }
+            current = current -> next;
+      }
+      
+            
+      temp -> next = NULL;
+      last -> next = temp;
+      last = temp;
+   }
+}
+
+void LinkedListClass::PrintList()
+{
+  current = head;
+  
+
+  if(isEmpty())
+  {
+    cout << "EMPTY" << endl;
   }
   
-  while((CurrentPtr != NULL) && (newPtr->firstName > CurrentPtr->firstName) && (newPtr->lastName > CurrentPtr->lastName))
+  else
   {
-    PreviousPtr -> firstName = Node.firstName;
-    PreviousPtr -> lastName = Node.lastName;
-    PreviousPtr -> address = Node.address;
-    PreviousPtr -> city = Node.city;
-    PreviousPtr -> state = Node.state;
-    PreviousPtr -> zipCode = Node.zipCode;
-  }
-  
-  if(CurrentPtr != NULL)
-  {
-    if(PreviousPtr == NULL)
+    while(current != NULL)
     {
-      //some stuff
+      cout << current -> firstName << endl;
+
+      current = current -> next;
     }
   }
-  
 }
+
+
