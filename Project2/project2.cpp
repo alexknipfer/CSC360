@@ -21,9 +21,10 @@ class LinkedListClass
 {
   public:
   LinkedListClass();
-    void InsertNode(NodeType);
+    void InsertCustomer(NodeType);
+    void DeleteCustomer(ifstream &);
     void InsertAsFirstElement(NodeType);
-    void PrintList();
+    void PrintMailingList(ofstream &);
     bool isEmpty();
 
   private:
@@ -73,14 +74,18 @@ int main()
                   getline(inputFile, Node.state);
                   inputFile >> ws;
                   getline(inputFile, Node.zipCode);
-                  LinkedList.InsertNode(Node);
+                  LinkedList.InsertCustomer(Node);
+                  break;
+      case 'D':   LinkedList.DeleteCustomer(inputFile);
+                  break;
+      case 'P':   LinkedList.PrintMailingList(outputFile);
+                  break;
       break;
     }
     
       //read in next transaction type
     inputFile >> transactionType;
   }
-  LinkedList.PrintList();
 }
 
 //******************************************************************************
@@ -124,10 +129,15 @@ void LinkedListClass::InsertAsFirstElement(NodeType Node)
 
 //******************************************************************************
 
-void LinkedListClass::InsertNode(NodeType Node)
+void LinkedListClass::InsertCustomer(NodeType Node)
 {
   current = head;
   string tempFirst;
+  string tempLast;
+  string tempAddress;
+  string tempCity;
+  string tempState;
+  string tempZip;
   
    if(isEmpty())
    {
@@ -152,6 +162,26 @@ void LinkedListClass::InsertNode(NodeType Node)
                 tempFirst = current->firstName;
                 current->firstName = temp->firstName;
                 temp->firstName = tempFirst;
+                
+                tempLast = current->lastName;
+                current->lastName = temp->lastName;
+                temp->lastName = tempLast;
+                
+                tempAddress = current->address;
+                current->address = temp->address;
+                temp->address = tempAddress;
+                
+                tempCity = current->city;
+                current->city = temp->city;
+                temp->city = tempCity;
+                
+                tempState = current->state;
+                current->state = temp->state;
+                temp->state = tempState;
+                
+                tempZip = current->zipCode;
+                current->zipCode = temp->zipCode;
+                temp->zipCode = tempZip;
             }
             current = current -> next;
       }
@@ -163,21 +193,71 @@ void LinkedListClass::InsertNode(NodeType Node)
    }
 }
 
-void LinkedListClass::PrintList()
+//******************************************************************************
+void LinkedListClass::DeleteCustomer(ifstream &inputFile)
 {
-  current = head;
-  
-
   if(isEmpty())
   {
-    cout << "EMPTY" << endl;
+    cout << "The database is empty" << endl;
   }
   
   else
   {
+    string first;
+    string last;
+    
+    NodeType *temp = head;
+    
+    inputFile >> first;
+    inputFile >> last;
+    
+    while(temp != NULL)
+    {
+      cout << temp -> firstName << endl;
+      cout << temp -> lastName << endl;
+      if(temp -> firstName == first && temp -> lastName == last)
+      {
+        cout << "DELETED" << endl;
+      }
+      temp = temp -> next;
+    }
+    
+  }
+}
+//******************************************************************************
+
+void LinkedListClass::PrintMailingList(ofstream &outputFile)
+{
+  current = head;
+
+  if(isEmpty())
+  {
+    cout << "The database is empty!" << endl;
+  }
+  
+  else
+  {
+    //Print a heading for the mailing list table.
+    outputFile << setw(50) << "MAILING LIST" << endl;
+    outputFile << "Last Name" << "       ";
+    outputFile << "First Name" << "       ";
+    outputFile << "Address" << "                ";
+    outputFile << "City" << "        ";
+    outputFile << "State" << "     ";
+    outputFile << "Zip Code" << endl;
+    outputFile << "==============================================";
+    outputFile << "============================================" << endl;
+    
+    
     while(current != NULL)
     {
-      cout << current -> firstName << endl;
+      outputFile << left << setw(16) << current -> lastName;
+      outputFile << left << setw(17) << current -> firstName;
+      outputFile << left << setw(23) << current -> address;
+      outputFile << left << setw(13) <<  current -> city;
+      outputFile << left << setw(11) << current -> state;
+      outputFile << current -> zipCode;
+      outputFile << endl;
 
       current = current -> next;
     }

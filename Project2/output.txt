@@ -1,0 +1,7 @@
+                                      MAILING LIST
+Last Name       First Name       Address                City        State     Zip Code
+==========================================================================================
+Knipfer         Alex             111 Airway             Butte        MO         63368
+Knipfer         Blex             111 Airway             Butte        MO         63368
+Chopper         Chip             111 Airway             Butte        MT         85529
+Earp            Wyatt            1870 Gunfight Dr       Tombstone    AZ         87652
