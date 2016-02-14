@@ -208,16 +208,17 @@ void LinkedListClass::DeleteCustomer(ifstream &inputFile)
     
     NodeType *temp = head;
     
-    inputFile >> first;
-    inputFile >> last;
+    inputFile >> ws;
+    getline(inputFile, first);
+    inputFile >> ws;
+    getline(inputFile, last);
+
     
     while(temp != NULL)
     {
-      cout << temp -> firstName << endl;
-      cout << temp -> lastName << endl;
       if(temp -> firstName == first && temp -> lastName == last)
       {
-        cout << "DELETED" << endl;
+        temp -> firstName = "DELETED";
       }
       temp = temp -> next;
     }
@@ -251,14 +252,16 @@ void LinkedListClass::PrintMailingList(ofstream &outputFile)
     
     while(current != NULL)
     {
-      outputFile << left << setw(16) << current -> lastName;
-      outputFile << left << setw(17) << current -> firstName;
-      outputFile << left << setw(23) << current -> address;
-      outputFile << left << setw(13) <<  current -> city;
-      outputFile << left << setw(11) << current -> state;
-      outputFile << current -> zipCode;
-      outputFile << endl;
-
+      if(current -> firstName != "DELETED")
+      {
+        outputFile << left << setw(16) << current -> lastName;
+        outputFile << left << setw(17) << current -> firstName;
+        outputFile << left << setw(23) << current -> address;
+        outputFile << left << setw(13) <<  current -> city;
+        outputFile << left << setw(11) << current -> state;
+        outputFile << current -> zipCode;
+        outputFile << endl;
+      }
       current = current -> next;
     }
   }
