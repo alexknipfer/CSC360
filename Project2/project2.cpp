@@ -147,6 +147,7 @@ void LinkedListClass::InsertCustomer(NodeType Node)
    else
    {
       NodeType *temp = new(NodeType);
+      
       temp -> firstName = Node.firstName;
       temp -> lastName = Node.lastName;
       temp -> address = Node.address;
@@ -154,9 +155,23 @@ void LinkedListClass::InsertCustomer(NodeType Node)
       temp -> state = Node.state;
       temp -> zipCode = Node.zipCode;
       
-      while(current != NULL)
+      while (current != NULL)
       {
-        if(temp->firstName < current->firstName)
+        if((temp -> firstName == current -> firstName) && (temp -> lastName == current -> lastName))
+            {
+              cout << "ERROR IN ADDING CUSTOMER" << endl;
+              temp -> firstName = "DELETED";
+            }
+        
+        current = current -> next;
+      }
+      
+      current = head;
+      
+      
+     while(current != NULL)
+      {
+          if(temp->lastName < current->lastName)
             {
                     //Swap first names.
                 tempFirst = current->firstName;
@@ -183,6 +198,7 @@ void LinkedListClass::InsertCustomer(NodeType Node)
                 current->zipCode = temp->zipCode;
                 temp->zipCode = tempZip;
             }
+            
             current = current -> next;
       }
       
@@ -206,7 +222,9 @@ void LinkedListClass::DeleteCustomer(ifstream &inputFile)
     string first;
     string last;
     
-    NodeType *temp = head;
+    NodeType *temp, *prev, *curr, *Node;
+    
+    Node = head;
     
     inputFile >> ws;
     getline(inputFile, first);
@@ -214,14 +232,42 @@ void LinkedListClass::DeleteCustomer(ifstream &inputFile)
     getline(inputFile, last);
 
     
-    while(temp != NULL)
+    /*while(temp != NULL)
     {
       if(temp -> firstName == first && temp -> lastName == last)
       {
         temp -> firstName = "DELETED";
       }
       temp = temp -> next;
+    }*/
+    
+    if(Node -> firstName == first && Node -> lastName == last)
+    {
+      temp = head;
+      head = head -> next;
+      delete(temp);
     }
+    
+    else
+    {
+      prev = head;
+      curr = head -> next;
+      
+      while((curr != NULL) && (curr -> firstName != first && curr -> lastName != last))
+      {
+        prev = curr;
+        curr = curr -> next;
+      }
+      
+      if(curr != NULL)
+      {
+        temp = curr;
+        prev -> next = curr -> next;
+        delete(temp);
+      }
+    }
+    
+    
     
   }
 }
@@ -238,6 +284,8 @@ void LinkedListClass::PrintMailingList(ofstream &outputFile)
   
   else
   {
+    
+    
     //Print a heading for the mailing list table.
     outputFile << setw(50) << "MAILING LIST" << endl;
     outputFile << "Last Name" << "       ";
