@@ -21,8 +21,9 @@ class LinkedListClass
 {
   public:
   LinkedListClass();
-    void InsertCustomer(NodeType);
-    void DeleteCustomer(ifstream &);
+    void InsertCustomer(NodeType, ofstream &);
+    void DeleteCustomer(ifstream &, ofstream &);
+    void ChangeCustomer(ifstream &, ofstream &);
     void InsertAsFirstElement(NodeType);
     void PrintMailingList(ofstream &);
     bool isEmpty();
@@ -42,7 +43,7 @@ int main()
     //instantiate object for customer
   LinkedListClass LinkedList;
   
-  ifstream inputFile("testdata.txt");
+  ifstream inputFile("data.txt");
   ofstream outputFile("output.txt");
   
   
@@ -74,13 +75,17 @@ int main()
                   getline(inputFile, Node.state);
                   inputFile >> ws;
                   getline(inputFile, Node.zipCode);
-                  LinkedList.InsertCustomer(Node);
+                  LinkedList.InsertCustomer(Node, outputFile);
                   break;
-      case 'D':   LinkedList.DeleteCustomer(inputFile);
+                  
+      case 'D':   LinkedList.DeleteCustomer(inputFile, outputFile);
                   break;
+                  
       case 'P':   LinkedList.PrintMailingList(outputFile);
                   break;
-      break;
+                  
+      case 'C':   LinkedList.ChangeCustomer(inputFile, outputFile);
+                  break;
     }
     
       //read in next transaction type
@@ -129,7 +134,7 @@ void LinkedListClass::InsertAsFirstElement(NodeType Node)
 
 //******************************************************************************
 
-void LinkedListClass::InsertCustomer(NodeType Node)
+void LinkedListClass::InsertCustomer(NodeType Node, ofstream &outputFile)
 {
   current = head;
   string tempFirst;
@@ -159,7 +164,10 @@ void LinkedListClass::InsertCustomer(NodeType Node)
       {
         if((temp -> firstName == current -> firstName) && (temp -> lastName == current -> lastName))
             {
-              cout << "ERROR IN ADDING CUSTOMER" << endl;
+              outputFile << temp -> firstName << " " << temp -> lastName << " ";
+              outputFile << "is already in the list. Attempt to add duplicate record failed!";
+              outputFile << endl;
+              outputFile << endl;
               temp -> firstName = "DELETED";
             }
         
@@ -210,7 +218,7 @@ void LinkedListClass::InsertCustomer(NodeType Node)
 }
 
 //******************************************************************************
-void LinkedListClass::DeleteCustomer(ifstream &inputFile)
+void LinkedListClass::DeleteCustomer(ifstream &inputFile, ofstream &outputFile)
 {
   if(isEmpty())
   {
@@ -224,7 +232,9 @@ void LinkedListClass::DeleteCustomer(ifstream &inputFile)
     
     NodeType *temp, *prev, *curr, *Node;
     
-    Node = head;
+    //Node = head;
+    
+    temp = head;
     
     inputFile >> ws;
     getline(inputFile, first);
@@ -232,16 +242,16 @@ void LinkedListClass::DeleteCustomer(ifstream &inputFile)
     getline(inputFile, last);
 
     
-    /*while(temp != NULL)
+    while(temp != NULL)
     {
       if(temp -> firstName == first && temp -> lastName == last)
       {
         temp -> firstName = "DELETED";
       }
       temp = temp -> next;
-    }*/
+    }
     
-    if(Node -> firstName == first && Node -> lastName == last)
+    /*if(Node -> firstName == first && Node -> lastName == last)
     {
       temp = head;
       head = head -> next;
@@ -259,18 +269,72 @@ void LinkedListClass::DeleteCustomer(ifstream &inputFile)
         curr = curr -> next;
       }
       
+      outputFile << "Record of " << prev -> firstName << prev -> lastName;
+      outputFile << " not found. Attempt to delete record failed!" << endl;
+      outputFile << endl;
+      
       if(curr != NULL)
       {
         temp = curr;
         prev -> next = curr -> next;
+        
         delete(temp);
       }
-    }
-    
-    
-    
+    }*/
   }
 }
+//******************************************************************************
+void LinkedListClass::ChangeCustomer(ifstream &inputFile, ofstream &outputFile)
+{
+  string first;
+  string last;
+  string newInfo;
+  int fieldNumber;
+  
+  current = head;
+  
+  inputFile >> ws;
+  getline(inputFile, first);
+  inputFile >> ws;
+  getline(inputFile, last);
+  inputFile >> fieldNumber;
+  inputFile >> ws;
+  getline(inputFile, newInfo);
+  
+  
+  while(current != NULL)
+  {
+    if(current -> firstName == "DELETED" && current -> firstName == first)
+    {
+      outputFile << "attempt to change invalid customer" << endl;
+      break;
+    }
+    
+    else if((current -> firstName == first) && (current -> lastName == last))
+    {
+      cout << "HELLO" << endl;
+      switch(fieldNumber)
+      {
+        case 1: current -> firstName = newInfo;
+                break;
+        case 2: current -> lastName = newInfo;
+                break;
+        case 3: current -> address = newInfo;
+                break;
+        case 4: current -> city = newInfo;
+                break;
+        case 5: current -> state = newInfo;
+                break;
+        case 6: current -> zipCode = newInfo;
+                break;
+      }
+      break;
+    }
+    
+    current = current -> next;
+  }
+}
+
 //******************************************************************************
 
 void LinkedListClass::PrintMailingList(ofstream &outputFile)
@@ -305,12 +369,17 @@ void LinkedListClass::PrintMailingList(ofstream &outputFile)
         outputFile << left << setw(16) << current -> lastName;
         outputFile << left << setw(17) << current -> firstName;
         outputFile << left << setw(23) << current -> address;
-        outputFile << left << setw(13) <<  current -> city;
+        outputFile << left << setw(13) << current -> city;
         outputFile << left << setw(11) << current -> state;
         outputFile << current -> zipCode;
         outputFile << endl;
       }
       current = current -> next;
+    }
+    
+    for(int x = 0; x < 3; x++)
+    {
+      outputFile << endl;
     }
   }
 }
