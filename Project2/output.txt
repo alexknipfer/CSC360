@@ -84,6 +84,10 @@ Zieler          Janet            2542 Symbol Lane       Dundalk      MD         
 
 
 
+Record of Dan         Kota         not found. Attempt to delete record failed!
+
+Record of Rico        Mays         not found. Attempt to delete record failed!
+
 MAILING LIST                                      
 Last Name       First Name       Address                City        State     Zip Code
 ==========================================================================================
@@ -189,6 +193,8 @@ Zieler          Janet            2542 Symbol Lane       Dundalk      MD         
 
 
 Robert       Lee          is already in the list. Attempt to add duplicate record failed!
+
+Record of Albert      Einstein     not found. Attempt to delete record failed!
 
 MAILING LIST                                      
 Last Name       First Name       Address                City        State     Zip Code

@@ -229,6 +229,7 @@ void LinkedListClass::DeleteCustomer(ifstream &inputFile, ofstream &outputFile)
   {
     string first;
     string last;
+    bool found = false;
     
     NodeType *temp, *prev, *curr, *Node;
     
@@ -247,8 +248,16 @@ void LinkedListClass::DeleteCustomer(ifstream &inputFile, ofstream &outputFile)
       if(temp -> firstName == first && temp -> lastName == last)
       {
         temp -> firstName = "DELETED";
+        found = true;
       }
       temp = temp -> next;
+    }
+    
+    if(found == false)
+    {
+      outputFile << "Record of " << first << last;
+      outputFile << " not found. Attempt to delete record failed!" << endl;
+      outputFile << endl;
     }
     
     /*if(Node -> firstName == first && Node -> lastName == last)
