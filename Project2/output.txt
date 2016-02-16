@@ -1,3 +1,7 @@
+                 Alex Knipfer         CSC 36000     Section 11
+                   Spring 2016       Assignment #2
+----------------------------------------------------------------------------
+
                                       MAILING LIST
 Last Name       First Name       Address                City        State     Zip Code
 ==========================================================================================
@@ -250,3 +254,7 @@ Zieler          Janet            2542 Symbol Lane       Dundalk      MD         
 
 
 
+
+--------------------------------   
+|    END OF PROGRAM OUTPUT     |   
+--------------------------------   
