@@ -81,7 +81,17 @@ int main()
       case 'D':   LinkedList.DeleteCustomer(inputFile, outputFile);
                   break;
                   
-      case 'P':   LinkedList.PrintMailingList(outputFile);
+      case 'P':     //Print a heading for the mailing list table.
+                  outputFile << setw(50) << "MAILING LIST" << endl;
+                  outputFile << "Last Name" << "       ";
+                  outputFile << "First Name" << "       ";
+                  outputFile << "Address" << "                ";
+                  outputFile << "City" << "        ";
+                  outputFile << "State" << "     ";
+                  outputFile << "Zip Code" << endl;
+                  outputFile << "==============================================";
+                  outputFile << "============================================" << endl;
+                  LinkedList.PrintMailingList(outputFile);
                   break;
                   
       case 'C':   LinkedList.ChangeCustomer(inputFile, outputFile);
@@ -321,7 +331,6 @@ void LinkedListClass::ChangeCustomer(ifstream &inputFile, ofstream &outputFile)
     
     else if((current -> firstName == first) && (current -> lastName == last))
     {
-      cout << "HELLO" << endl;
       switch(fieldNumber)
       {
         case 1: current -> firstName = newInfo;
@@ -359,16 +368,7 @@ void LinkedListClass::PrintMailingList(ofstream &outputFile)
   {
     
     
-    //Print a heading for the mailing list table.
-    outputFile << setw(50) << "MAILING LIST" << endl;
-    outputFile << "Last Name" << "       ";
-    outputFile << "First Name" << "       ";
-    outputFile << "Address" << "                ";
-    outputFile << "City" << "        ";
-    outputFile << "State" << "     ";
-    outputFile << "Zip Code" << endl;
-    outputFile << "==============================================";
-    outputFile << "============================================" << endl;
+    
     
     
     while(current != NULL)
