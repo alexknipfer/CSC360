@@ -2,62 +2,68 @@
 #include <fstream>
 #include <iomanip>
 #include <cstring>
+#include <vector>
 
 using namespace std;
-
-struct CustomerData
-{
-  int arrivalTime;
-  string name;
-  int processingTime;
-  CustomerData *next;
-};
 
 class LinkedQueueClass
 {
   public:
-    LinkedQueueClass();
-    ~LinkedQueueClass();
-    bool IsEmpty(){return ((front==NULL) ? true : false);}
+    void addCustomers(int, string, int);
+    void printCustomers(ofstream &);
 
   private:
     int count;
-    CustomerData *front;
-    CustomerData *rear;
+    vector<int> arrivalTimes;
+    vector<string> names;
+    vector<int> processingTimes;
 };
 
 //******************************************************************************
 
 int main()
 { 
-    return 0;
-}
+  LinkedQueueClass customers;
+  ifstream inputFile("queue_in.txt");
+  ofstream outputFile("output.txt");
+  
+  int arrivalTime;
+  string name;
+  int processingTime;
+  
+  inputFile >> arrivalTime;
 
-//******************************************************************************
-
-LinkedQueueClass::LinkedQueueClass()
-{
-  front = NULL;
-  rear = NULL;
-  count = 0;
-}
-
-//******************************************************************************
-
-LinkedQueueClass::~LinkedQueueClass()
-{
-  CustomerData *next;
-  while(front != NULL)
+  while(arrivalTime != -99)
   {
-    next = front -> next;
-    delete front;
-    front = next;
+    inputFile >> ws;
+    getline(inputFile, name);
+    inputFile >> ws;
+
+    inputFile >> processingTime;
+    
+    customers.addCustomers(arrivalTime, name, processingTime);
+
+    inputFile >> arrivalTime;
+  }
+  
+  customers.printCustomers(outputFile);
+  
+  return 0;
+}
+
+//******************************************************************************
+
+void LinkedQueueClass::printCustomers(ofstream &outputFile)
+{
+  for(int x = 0; x < names.size(); x++)
+  {
+    outputFile << names[x] << endl;
   }
 }
 
-//******************************************************************************
-
-bool LinkedQueueClass()
+void LinkedQueueClass::addCustomers(int arrivalTime, string name, int processingTime)
 {
-  
+  arrivalTimes.push_back(arrivalTime);
+  names.push_back(name);
+  processingTimes.push_back(processingTime);
 }
