@@ -9,11 +9,14 @@ using namespace std;
 class LinkedQueueClass
 {
   public:
+    LinkedQueueClass();
     void addCustomers(int, string, int);
     void printCustomers(ofstream &);
 
   private:
-    int count;
+    int queue1Count;
+    int queue2Count;
+    int queue3Count;
     vector<int> arrivalTimes;
     vector<string> names;
     vector<int> processingTimes;
@@ -46,9 +49,21 @@ int main()
     inputFile >> arrivalTime;
   }
   
+  outputFile << "The order of customer arrival is:" << endl;
+  outputFile << "---------------------------------" << endl;
+  
   customers.printCustomers(outputFile);
   
   return 0;
+}
+
+//******************************************************************************
+
+LinkedQueueClass::LinkedQueueClass()
+{
+  queue1Count = 0;
+  queue2Count = 0;
+  queue3Count = 0;
 }
 
 //******************************************************************************
