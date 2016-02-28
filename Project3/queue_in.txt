@@ -1,0 +1,117 @@
+1
+Quicy McCoil
+3  
+3
+Wanda Gore
+17
+4
+Ellen Stapeton
+2
+6
+Roy Rogers
+3
+7
+Tom Terrific
+22
+10
+Yul Brenner
+1
+12
+Ursula Anderson
+1
+13
+Ida Lapino
+12
+20
+Oscar Madison
+8
+21
+Paula Abdul
+6
+22
+Albert Hall
+12
+23
+Sam Malone
+5
+24
+Diana Keaton
+8
+28
+Freddie Freeloader
+3
+30
+Greda Garbo
+16
+33
+Hacksaw Jones
+3
+39
+John Wayne
+5
+40
+Kimberly Klark
+4 
+49
+Linda Lovelace
+11
+-99
+No More1
+Quicy McCoil
+3  
+3
+Wanda Gore
+17
+4
+Ellen Stapeton
+2
+6
+Roy Rogers
+3
+7
+Tom Terrific
+22
+10
+Yul Brenner
+1
+12
+Ursula Anderson
+1
+13
+Ida Lapino
+12
+20
+Oscar Madison
+8
+21
+Paula Abdul
+6
+22
+Albert Hall
+12
+23
+Sam Malone
+5
+24
+Diana Keaton
+8
+28
+Freddie Freeloader
+3
+30
+Greda Garbo
+16
+33
+Hacksaw Jones
+3
+39
+John Wayne
+5
+40
+Kimberly Klark
+4 
+49
+Linda Lovelace
+11
+-99
+No More
