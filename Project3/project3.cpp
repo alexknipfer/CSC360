@@ -31,6 +31,12 @@ class LinkedQueueClass
     int count;
     int totalTime;
     vector<string> finalQueue;
+    vector<int> queue1times;
+    vector<string> queue1names;
+    vector<int> queue2times;
+    vector<string> queue2names;
+    vector<int> queue3times;
+    vector<string> queue3names;
     CustomerData *front;
     CustomerData *rear;
     CustomerData *current;
@@ -186,9 +192,123 @@ void LinkedQueueClass::PrintData(ofstream &outputFile)
     }
 }
 
+
+
 //******************************************************************************
 
 void LinkedQueueClass::ProcessCustomer()
+{
+  bool empty = false;
+  int processCount = count;
+  int firstTimes;
+  int queue1count = 0;
+  int queue2count = 0;
+  int queue3count = 0;
+  int finalQueueData = 0;
+  current = front;
+  firstTimes = totalTime;
+  
+  
+  queue1names.push_back(current -> name);
+  queue1times.push_back(current -> processingTime);
+  firstTimes -= current -> processingTime;
+  
+  current = current -> next;
+  
+  queue2names.push_back(current -> name);
+  queue2times.push_back(current -> processingTime);
+  firstTimes -= current -> processingTime;
+  
+  current = current -> next;
+  
+  queue3names.push_back(current -> name);
+  queue3times.push_back(current -> processingTime);
+  firstTimes -= current -> processingTime;
+  
+  current = current -> next;
+  
+  while(current != NULL)
+  {
+    for(int x = 0; x < queue1times.size(); x++)
+    {
+      queue1count += queue1times[x];
+    }
+    
+    for(int y = 0; y < queue2times.size(); y++)
+    {
+      queue2count += queue2times[y];
+    }
+    
+    for(int z = 0; z < queue3times.size(); z++)
+    {
+      queue3count += queue3times[z];
+    }
+    
+    if(queue1count < queue2count && queue1count < queue3count)
+    {
+      queue1names.push_back(current -> name);
+      queue1times.push_back(current -> processingTime);
+    }
+    
+    else if(queue2count < queue1count && queue2count < queue3count)
+    {
+      queue2names.push_back(current -> name);
+      queue2times.push_back(current -> processingTime);
+    }
+    
+    else if(queue3count < queue1count && queue3count < queue2count)
+    {
+      queue3names.push_back(current -> name);
+      queue3times.push_back(current -> processingTime);
+    }
+    current = current -> next;
+  }
+  
+  /*while(empty != true)
+  {
+    for(int x = 0; x < queue1times.size(); x++)
+    {
+      queue1times[x] -= 1;
+      if(queue1times[x] == 0)
+      {
+        finalQueue[finalQueueData] = queue1names[x];
+        finalQueueData++;
+        queue1names[x].erase();
+        queue1times[x].erase();
+      }
+    }
+    if(queue1names.size() == 0)
+    {
+      empty = false;
+    }
+  }*/
+  
+  for(int x = 0; x < queue1times.size(); x++)
+  {
+    cout << queue1names[x] << endl;
+    finalQueue.push_back(queue1names[x]);
+  }
+  
+  cout << endl;
+  
+  for(int x = 0; x < queue2times.size(); x++)
+  {
+    cout << queue2names[x] << endl;
+    finalQueue.push_back(queue2names[x]);
+  }
+  
+  cout << endl;
+  
+  for(int x = 0; x < queue3times.size(); x++)
+  {
+    cout << queue3names[x] << endl;
+    finalQueue.push_back(queue3names[x]);
+  }
+
+    
+}
+
+/*void LinkedQueueClass::ProcessCustomer()
 {
   bool processed = false;
   int processCount = count;
@@ -206,10 +326,9 @@ void LinkedQueueClass::ProcessCustomer()
       }
       
       current = current -> next;
-      //cout << processCount << endl;
     } 
     current = front;
   }
     
-}
+}*/
 
