@@ -6,68 +6,73 @@
 
 using namespace std;
 
-struct CustomerData
-{
-  int arrivalTime;
-  string name;
-  int processingTime;
-  CustomerData *next;
-};
-
+  //class for customer queue(s)
 class LinkedQueueClass
 {
   public:
     LinkedQueueClass();
-    ~LinkedQueueClass();
-    bool IsEmpty(){return ((front==NULL) ? true : false);}
-    bool IsFull();
-    CustomerData * First();
-    CustomerData * Last();
-    bool Add(CustomerData);
+    void AddCustomer(ifstream &);
     void PrintData(ofstream &);
     void ProcessCustomer();
     
   private:
+      //1st queue for customers
+    LinkedQueueClass *queue1;
+    LinkedQueueClass *queue1next;
+    int queue1time;
+    
+      //2nd queue for customers
+    LinkedQueueClass *queue2;
+    LinkedQueueClass *queue2next;
+    int queue2time;
+    
+      //3rd queue for customers
+    LinkedQueueClass *queue3;
+    LinkedQueueClass *queue3next;
+    int queue3time;
+    
+    int processTime;
+    string name;
     int count;
-    int totalTime;
+
+      //vector to store and print initial list
+    vector<string> initialQueue;
+      //vector to store final customers to print
     vector<string> finalQueue;
-    vector<int> queue1times;
-    vector<string> queue1names;
-    vector<int> queue2times;
-    vector<string> queue2names;
-    vector<int> queue3times;
-    vector<string> queue3names;
-    CustomerData *front;
-    CustomerData *rear;
-    CustomerData *current;
 };
+
+  //prototypes for header and footer
+void printHeader(ofstream &);
+void printFooter(ofstream &);
 
 //******************************************************************************
 
 int main()
-{ 
-  CustomerData customer;
-  LinkedQueueClass Queue;
+{
+  LinkedQueueClass customer;
+  int arrivalTime;
   
-  ifstream inputFile("data.txt");
+  ifstream inputFile("queue_in.txt");
   ofstream outputFile("output.txt");
   
-  inputFile >> customer.arrivalTime;
+    //print program header
+  printHeader(outputFile);
   
-  while(customer.arrivalTime != -99)
+    //read in customer arrival time
+  inputFile >> arrivalTime;
+    
+    //continue reading data until sentinel (-99)
+  while(arrivalTime != -99)
   {
-    inputFile >> ws;
-    getline(inputFile, customer.name);
-    inputFile >> ws;
-    inputFile >> customer.processingTime;
-    
-    Queue.Add(customer);
-    
-    inputFile >> customer.arrivalTime;
+      //add customer to initial queue
+    customer.AddCustomer(inputFile);
+    inputFile >> arrivalTime;
   }
   
-  Queue.ProcessCustomer();
+    //process customers
+  customer.ProcessCustomer();
   
+    //print labels for customer listing
   outputFile << "The order of customer arrival is:";
   outputFile << "           ";
   outputFile << "The order of customer departure is:" << endl;
@@ -75,7 +80,11 @@ int main()
   outputFile << "          ";
   outputFile << "---------------------------------" << endl;
   
-  Queue.PrintData(outputFile);
+    //print the customer data
+  customer.PrintData(outputFile);
+  
+    //print program footer
+  printFooter(outputFile);
   
   return 0;
 }
@@ -84,251 +93,299 @@ int main()
 
 LinkedQueueClass::LinkedQueueClass()
 {
-  front = NULL;
-  rear = NULL;
+  queue1 = NULL;
+  queue1next = NULL;
+  queue1time = 0;
+  
+  queue2 = NULL;
+  queue2next = NULL;
+  queue2time = 0;
+  
+  queue3 = NULL;
+  queue3next = NULL;
+  queue3time = 0;
+  
   count = 0;
-  totalTime = 0;
 }
 
 //******************************************************************************
 
-LinkedQueueClass::~LinkedQueueClass()
+void LinkedQueueClass::AddCustomer(ifstream &inputFile)
 {
-  CustomerData *next;
-  while(front != NULL)
-  {
-    next = front -> next;
-    delete front;
-    front = next;
-  }
-}
+  LinkedQueueClass *current;
+  LinkedQueueClass *next;
+  LinkedQueueClass *temp1;
+  LinkedQueueClass *temp2;
 
-//******************************************************************************
-
-bool LinkedQueueClass::IsFull()
-{
-  CustomerData *p;
-  p = new(CustomerData);
-  if(p == NULL)
-  {
-    delete p;
-    cout << "Out of memory. " << endl;
-    return true;
-  }
-  return false;
-}
-
-//******************************************************************************
-
-CustomerData * LinkedQueueClass::First()
-{
-  if(IsEmpty() )
-  {
-    cout << "Queue is Empty. " << endl;
-    return NULL;
-  }
-  return front;
-}
-
-//******************************************************************************
-
-CustomerData * LinkedQueueClass::Last()
-{
-  if(IsEmpty())
-  {
-    cout << "Queue is Empty. " << endl;
-    return NULL;
-  }
-  return rear;
-}
-
-//******************************************************************************
-
-bool LinkedQueueClass::Add(CustomerData NewNode)
-{
-  CustomerData *NewPtr;
-  NewPtr = new (CustomerData);
+  string currentName;
+  int currentProcessTime;
   
-  if(IsFull())
+  current = new LinkedQueueClass;
+  
+  inputFile >> ws;
+  getline(inputFile, currentName);
+  inputFile >> ws;
+  inputFile >> currentProcessTime;
+  
+  current -> name = currentName;
+  current -> processTime = currentProcessTime;
+  count++;
+  
+  initialQueue.push_back(currentName);
+  
+  if(queue1 == NULL)
   {
-    return false;
+    queue1 = current;
+    current -> name = currentName;
+    current -> processTime--;
+    queue1time += current -> processTime;
+    finalQueue.push_back(currentName);
   }
   
-  NewPtr -> arrivalTime = NewNode.arrivalTime;
-  NewPtr -> name = NewNode.name;
-  NewPtr -> processingTime = NewNode.processingTime;
-  totalTime += NewNode.processingTime;
-  NewPtr -> next = NULL;
-  
-  if(front == NULL)
+  else if(queue2 == NULL)
   {
-    front = NewPtr;
+    queue2 = current;
+    current -> name = currentName;
+    current -> processTime--;
+    queue2time += current -> processTime;
+    finalQueue.push_back(currentName);
+  }
+  
+  else if(queue3 == NULL)
+  {
+    queue3 = current;
+    current -> name = currentName;
+    current -> processTime--;
+    queue3time += current -> processTime;
+    finalQueue.push_back(currentName);
+  }
+  
+  else if(queue1time < queue2time && queue1time < queue3time)
+  {
+    next = queue1;
+    
+        while(next->queue1next != NULL)
+        {
+            next = next -> queue1next;
+            
+            if(next -> processTime != 0)
+            {
+                while(next -> processTime != 0)
+                    next -> processTime--;
+                
+                if(next -> processTime == 0)
+                {
+                    finalQueue.push_back(next->name);
+                }
+            }
+        }
+        
+        next-> queue1next = current;
+        
+        queue1time += current->processTime;
+  }
+  
+  else if(queue2time < queue1time && queue2time < queue3time)
+  {
+    next = queue2;
+    
+        while(next->queue2next != NULL)
+        {
+            next = next -> queue2next;
+            
+            if(next -> processTime != 0)
+            {
+                while(next -> processTime != 0)
+                    next -> processTime--;
+                
+                if(next -> processTime == 0)
+                {
+                    finalQueue.push_back(next->name);
+                }
+            }
+        }
+        
+        next-> queue2next = current;
+        
+        queue2time += current->processTime;
+  }
+  
+  else if(queue3time < queue2time && queue3time < queue1time)
+  {
+    next = queue3;
+    
+        while(next->queue3next != NULL)
+        {
+            next = next -> queue3next;
+            
+            if(next -> processTime != 0)
+            {
+                while(next -> processTime != 0)
+                    next -> processTime--;
+                
+                if(next -> processTime == 0)
+                {
+                    finalQueue.push_back(next->name);
+                }
+            }
+        }
+        
+        next-> queue3next = current;
+        
+        queue3time += current->processTime;
+  }
+  
+  else if(queue1time == queue2time && queue1time == queue3time)
+  {
+    next = queue1;
+    
+        while(next->queue1next != NULL)
+        {
+            next = next -> queue1next;
+            
+            if(next -> processTime != 0)
+            {
+                while(next -> processTime != 0)
+                    next -> processTime--;
+                
+                if(next -> processTime == 0)
+                {
+                    finalQueue.push_back(next->name);
+                }
+            }
+        }
+        
+        next-> queue1next = current;
+        
+        queue1time += current->processTime;
+  }
+  
+  else if(queue2time == queue1time && queue2time == queue3time)
+  {
+    next = queue2;
+    
+        while(next->queue2next != NULL)
+        {
+            next = next -> queue2next;
+            
+            if(next -> processTime != 0)
+            {
+                while(next -> processTime != 0)
+                    next -> processTime--;
+                
+                if(next -> processTime == 0)
+                {
+                    finalQueue.push_back(next->name);
+                }
+            }
+        }
+        
+        next-> queue2next = current;
+        
+        queue2time += current->processTime;
   }
   
   else
   {
-    rear -> next = NewPtr;
+    next = queue3;
+    
+        while(next->queue3next != NULL)
+        {
+            next = next -> queue3next;
+            
+            if(next -> processTime != 0)
+            {
+                while(next -> processTime != 0)
+                    next -> processTime--;
+                
+                if(next -> processTime == 0)
+                {
+                    finalQueue.push_back(next->name);
+                }
+            }
+        }
+        
+        next-> queue3next = current;
+        
+        queue3time += current->processTime;
   }
-  
-  rear = NewPtr;
-  count++;
-  return true;
 }
-
-//******************************************************************************
-
-
-void LinkedQueueClass::PrintData(ofstream &outputFile)
-{
-  cout << totalTime;
-  current = front;
-  int data = 0;
-    while(current != NULL)
-    {
-      outputFile << current -> name << "               |";
-      outputFile << setw(30) << finalQueue[data] << endl;
-      current = current -> next;
-      data++;
-    }
-}
-
-
 
 //******************************************************************************
 
 void LinkedQueueClass::ProcessCustomer()
 {
-  bool empty = false;
-  int processCount = count;
-  int firstTimes;
-  int queue1count = 0;
-  int queue2count = 0;
-  int queue3count = 0;
-  int finalQueueData = 0;
-  current = front;
-  firstTimes = totalTime;
+  LinkedQueueClass *first, *second, *last;
   
+  first = queue1;
+  second = queue2;
+  last = queue3;
   
-  queue1names.push_back(current -> name);
-  queue1times.push_back(current -> processingTime);
-  firstTimes -= current -> processingTime;
-  
-  current = current -> next;
-  
-  queue2names.push_back(current -> name);
-  queue2times.push_back(current -> processingTime);
-  firstTimes -= current -> processingTime;
-  
-  current = current -> next;
-  
-  queue3names.push_back(current -> name);
-  queue3times.push_back(current -> processingTime);
-  firstTimes -= current -> processingTime;
-  
-  current = current -> next;
-  
-  while(current != NULL)
+  while(first -> queue1next != NULL)
   {
-    for(int x = 0; x < queue1times.size(); x++)
-    {
-      queue1count += queue1times[x];
-    }
     
-    for(int y = 0; y < queue2times.size(); y++)
-    {
-      queue2count += queue2times[y];
-    }
-    
-    for(int z = 0; z < queue3times.size(); z++)
-    {
-      queue3count += queue3times[z];
-    }
-    
-    if(queue1count < queue2count && queue1count < queue3count)
-    {
-      queue1names.push_back(current -> name);
-      queue1times.push_back(current -> processingTime);
-    }
-    
-    else if(queue2count < queue1count && queue2count < queue3count)
-    {
-      queue2names.push_back(current -> name);
-      queue2times.push_back(current -> processingTime);
-    }
-    
-    else if(queue3count < queue1count && queue3count < queue2count)
-    {
-      queue3names.push_back(current -> name);
-      queue3times.push_back(current -> processingTime);
-    }
-    current = current -> next;
+    first = first -> queue1next;
   }
   
-  /*while(empty != true)
+  while(second -> queue2next != NULL)
   {
-    for(int x = 0; x < queue1times.size(); x++)
-    {
-      queue1times[x] -= 1;
-      if(queue1times[x] == 0)
-      {
-        finalQueue[finalQueueData] = queue1names[x];
-        finalQueueData++;
-        queue1names[x].erase();
-        queue1times[x].erase();
-      }
-    }
-    if(queue1names.size() == 0)
-    {
-      empty = false;
-    }
-  }*/
-  
-  for(int x = 0; x < queue1times.size(); x++)
-  {
-    cout << queue1names[x] << endl;
-    finalQueue.push_back(queue1names[x]);
-  }
-  
-  cout << endl;
-  
-  for(int x = 0; x < queue2times.size(); x++)
-  {
-    cout << queue2names[x] << endl;
-    finalQueue.push_back(queue2names[x]);
-  }
-  
-  cout << endl;
-  
-  for(int x = 0; x < queue3times.size(); x++)
-  {
-    cout << queue3names[x] << endl;
-    finalQueue.push_back(queue3names[x]);
-  }
-
     
+    second = second -> queue2next;
+  }
+  
+  while(last -> queue3next != NULL)
+  {
+    
+    last = last -> queue3next;
+  }
+  
+  finalQueue.push_back(first -> name);
+  finalQueue.push_back(second -> name);
+  finalQueue.push_back(last -> name);
 }
 
-/*void LinkedQueueClass::ProcessCustomer()
+//******************************************************************************
+
+void LinkedQueueClass::PrintData(ofstream &outputFile)
 {
-  bool processed = false;
-  int processCount = count;
-  current = front;
-  
-  for(int x = 0; x < totalTime; x++)
+  for(int x = 0; x < finalQueue.size(); x++)
   {
-   while(current != NULL)
-    {
-      current -> processingTime -= 1;
-      if(current -> processingTime == 0)
-      {
-        finalQueue.push_back(current -> name);
-        processCount--;
-      }
-      
-      current = current -> next;
-    } 
-    current = front;
+    outputFile << initialQueue[x] << "               |";
+    outputFile << setw(30) << finalQueue[x] << endl;
   }
-    
-}*/
+}
+
+//******************************************************************************
+
+void printHeader(ofstream &Outfile)
+{
+		// Receives - the output file
+		// Task- Prints the output preamble
+		// Returns - Nothing
+	Outfile << setw(30) << "Alex Knipfer ";
+	Outfile << setw(17) << "CSC 36000";
+	Outfile << setw(15) << "Section 11" << endl;
+	Outfile << setw(30) << "Spring 2016";
+	Outfile << setw(20) << "Assignment #3" << endl;
+	Outfile << setw(35) << "--------------------------------------";
+	Outfile << setw(35) << "--------------------------------------\n\n";
+	return;
+}
+
+//******************************************************************************
+
+void printFooter(ofstream &Outfile)
+{
+    //Receives - the output file
+    //Task - print output footer
+    //Returns- nothing
+	Outfile << endl;
+	Outfile << setw(35) << "--------------------------------" << endl;
+	Outfile << setw(35) << "|    END OF PROGRAM OUTPUT     |" << endl;
+	Outfile << setw(35) << "--------------------------------" << endl;
+
+	return;
+}
+
+//*********************** END OF PROGRAM ************************************//
 

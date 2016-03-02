@@ -80,7 +80,7 @@ int main()
 	}
     
         //Read all data from this file.
-	ifstream inputFile("data.txt");
+	ifstream inputFile("queue_in.txt");
 	
         //Check for an error opening the inputFile.
 	if(!inputFile)
