@@ -1,3 +1,29 @@
+//******************  PROGRAM IDENTIFICATION  **********************************
+//*                                                                            *
+//*  PROGRAM FILE NAME: project3.cpp  ASSIGNMENT #:  3    GRADE: _____         *
+//*   	                                                                       *
+//*  PROGRAM AUTHOR:   ____________________________________                    *
+//*                             Alex Knipfer                                   *
+//*                                                                            *
+//*  COURSE #:   CSC 36000 11             DUE DATE: March 07, 2015             *
+//*                                                                            * 
+//******************************************************************************
+
+
+//********************* PROGRAM DESCRIPTION ************************************
+//*    Process: This program utilizes queues to simulate customer processing   *
+//*             at a supermarket. Customers will be added to the queues and    *
+//*             processed based on the queue process time and their arrival    *
+//*             time.                                                          *
+//*                                                                            *
+//*    USER DEFINED                                                            *
+//*     MODULES:       : printHeader - print program header                    *
+//*                      printFooter - print program footer                    *
+//*                      AddCustomer - read in customer and add to queue       *
+//*                      ProcessCustomer - process final customers in queue    *
+//*                      PrintData - print customer in the "final queue"       *
+//******************************************************************************
+
 #include <iostream>
 #include <fstream>
 #include <iomanip>
