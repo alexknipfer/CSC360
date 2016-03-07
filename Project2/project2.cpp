@@ -501,7 +501,7 @@ void LinkedListClass::PrintMailingList(ofstream &outputFile)
     }
     
       //create proper spacing for output
-    for(int x = 0; x < 3; x++)
+    for(int x = 0; x < 30; x++)
     {
       outputFile << endl;
     }
