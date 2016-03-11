@@ -1,0 +1,7 @@
+                         CONVERSION DISPLAY
+Infix Expression         POSTFIX Expression               Stack
+Contents                                               (Top to Bottom)
+
+(3+4)*6                       Empty                       Empty 
+ 3+4)*6                       Empty                       (
+  +4)*6                       3                             (
