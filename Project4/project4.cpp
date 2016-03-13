@@ -16,7 +16,7 @@ class StackClass
     void Push(char);
     void Pop();
     void Print(string, ofstream &);
-    bool RetrieveTop();
+    char RetrieveTop();
     bool IsEmpty(){return(TopPtr == NULL);}
     StackClass *GetTop(){return TopPtr;}
     bool IsFull();
@@ -29,7 +29,7 @@ class StackClass
     vector <char> equationChar;
     char stackSymbol;
     int infixCount;
-
+    int equationCount;
 };
 
 //******************************************************************************
@@ -65,9 +65,13 @@ StackClass::StackClass()
 
 void StackClass::ProcessEquation(ifstream &inputFile, ofstream &outputFile)
 {
+  bool foundParen = false;
+  bool popComplete = false;
   string myEquation;
   inputFile >> myEquation;
-  
+
+  equationCount = myEquation.length();
+
     //store string read in into character vector for printing
   for(int x = 0; x < myEquation.length(); x++)
   {
@@ -86,17 +90,117 @@ void StackClass::ProcessEquation(ifstream &inputFile, ofstream &outputFile)
       if(isdigit(myEquation[x]))
       {
         postfixExpression.push_back(myEquation[x]);
+        equationCount--;
         Print(myEquation, outputFile);
-        return;
+        //return;
       }
       
       else if(myEquation[x] == '(')
       {
         Push(myEquation[x]);
+        equationCount--;
+        Print(myEquation, outputFile);
+      }
+      
+        //check to see if operand is a + or -
+      else if(myEquation[x] == '+' || myEquation[x] == '-')
+      {
+          //if the stack is empty add the operand: Step 5.1
+        if(IsEmpty())
+        {
+          Push(myEquation[x]);
+          equationCount--;
+          Print(myEquation, outputFile);
+        }
+        
+          //if the stack is not empty do the following: Step 5.2
+        else
+        {
+          if(RetrieveTop() == '(')
+          {
+            Push(myEquation[x]);
+            equationCount--;
+            Print(myEquation, outputFile);
+          }
+          
+            //Step 5.2.3
+          else if(RetrieveTop() == '/' || RetrieveTop() == '*')
+          {
+            postfixExpression.push_back(RetrieveTop());
+            Pop();
+            Push(myEquation[x]);
+            equationCount--;
+            Print(myEquation, outputFile);
+          }
+        }
+      }
+      
+      else if(myEquation[x] == '*' || myEquation[x] == '/')
+      {
+          //if the stack is empty add the operand: Step 5.1
+        if(IsEmpty())
+        {
+          Push(myEquation[x]);
+          equationCount--;
+          Print(myEquation, outputFile);
+        }
+        
+        else
+        {
+          if(RetrieveTop() == '(')
+          {
+            Push(myEquation[x]);
+            equationCount--;
+            Print(myEquation, outputFile);
+          }
+          
+          else if(RetrieveTop() == '+' || RetrieveTop() == '-')
+          {
+            Push(myEquation[x]);
+            equationCount--;
+            Print(myEquation, outputFile);
+          }
+        }
+      }
+      
+      else if(myEquation[x] == ')')
+      {
+        while(foundParen == false)
+        {
+          if(RetrieveTop() == '(')
+          {
+            Pop();
+            foundParen = true;
+          }
+          
+          else
+          {
+            postfixExpression.push_back(RetrieveTop());
+            Pop();
+          }
+        }
+        equationCount--;
         Print(myEquation, outputFile);
       }
     }
+    
+    while(popComplete == false)
+    {
+      postfixExpression.push_back(RetrieveTop());
+      Pop();
+      if(IsEmpty())
+      {
+        popComplete = true;
+      }
+    }
+    Print(myEquation, outputFile);
+    postfixExpression.clear();
+    myEquation.clear();
+    infixCount = 0;
+    outputFile << endl;
+    
     inputFile >> myEquation;
+    cout << myEquation;
   }
 }
 
@@ -138,21 +242,47 @@ void StackClass::Pop()
 
 //******************************************************************************
 
+char StackClass::RetrieveTop()
+{
+  char topCharacter;
+  
+  topCharacter = TopPtr -> stackSymbol;
+  
+  return topCharacter;
+}
+
+//******************************************************************************
+
 void StackClass::Print(string equation, ofstream &outputFile)
 {
   StackClass *current;
   current = TopPtr;
 
-    //print proper spacing to right align infix expression
-  for(int x = 0; x < infixCount; x++)
+  if(equationCount == 0)
   {
-    outputFile << " ";
+        //print proper spacing to right align infix expression
+    for(int x = 5; x < infixCount; x++)
+    {
+      outputFile << " ";
+    }
+    outputFile << "Empty";
   }
   
-    //print infix expression
-  for(int x = infixCount; x < equationChar.size(); x++)
+  else
   {
-    outputFile << equationChar[x];
+        //print proper spacing to right align infix expression
+    for(int x = 0; x < infixCount; x++)
+    {
+      outputFile << " ";
+    }
+    
+      //print infix expression
+    for(int x = infixCount; x < equationChar.size(); x++)
+    {
+      outputFile << equationChar[x];
+    }
+    
+   
   }
   
     //if the postfix expression consists of nothing print empty
@@ -184,13 +314,16 @@ void StackClass::Print(string equation, ofstream &outputFile)
   {
     while(current != NULL)
     {
-      outputFile << current -> stackSymbol;
+      outputFile << left << current -> stackSymbol;
       current = current -> next;
     }
   }
   
     //increment infix count for printing infix expression
-  infixCount++;
+  if(equationCount != 0)
+  {
+    infixCount++;
+  }
   outputFile << endl;
   return;
 }
