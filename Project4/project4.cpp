@@ -222,21 +222,20 @@ void StackClass::ProcessEquation(ifstream &inputFile, ofstream &outputFile)
     outputFile << endl;
     
     inputFile >> myEquation;
-    cout << myEquation << endl;
+
+          //store string read in into character vector for printing
+    for(int x = 0; x < myEquation.length(); x++)
+    {
+      equationChar.push_back(myEquation[x]);
+    }
     
-        //store string read in into character vector for printing
-  for(int x = 0; x < myEquation.length(); x++)
-  {
-    equationChar.push_back(myEquation[x]);
-  }
-  
-  equationCount = myEquation.length();
-  
-  if(myEquation != "X")
-  {
-       //print initial infix expression
-    Print(myEquation, outputFile);
-  }
+    equationCount = myEquation.length();
+    
+    if(myEquation != "X")
+    {
+         //print initial infix expression
+      Print(myEquation, outputFile);
+    }
   
   }
 }
