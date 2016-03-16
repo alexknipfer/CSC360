@@ -318,6 +318,7 @@ void StackClass::EvaluateExpression(ofstream &outputFile)
   
   outputFile << "                        Empty" << endl;
   evaluation.push(postfixExpression.front());
+  stackContents.push_back(postfixExpression.front());
   postfixExpression.erase(postfixExpression.begin());
   
   while(!postfixExpression.empty())
@@ -325,14 +326,15 @@ void StackClass::EvaluateExpression(ofstream &outputFile)
     if(isdigit(postfixExpression[count]))
     {
       evaluation.push(postfixExpression[count]);
+      stackContents.push_back(postfixExpression[count]);
       for(int y = 0; y < postfixExpression.size(); y++)
       {
         outputFile << right << postfixExpression[y];
       }
       postfixExpression.erase(postfixExpression.begin());
-      for(int x = 0; x < evaluation.size(); x++)
+      for(int x = stackContents.size(); x --> 0;)
       {
-        outputFile << " " << evaluation[x];
+        outputFile << " " << stackContents[x];
       }
       outputFile << endl;
     }
@@ -344,6 +346,7 @@ void StackClass::EvaluateExpression(ofstream &outputFile)
         outputFile << left << postfixExpression[y];
       }
       postfixExpression.erase(postfixExpression.begin());
+      cout << postfixExpression[count] << endl;
       outputFile << endl;
     }
     count++;

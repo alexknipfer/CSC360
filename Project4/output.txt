@@ -16,7 +16,7 @@ Contents                                               (Top to Bottom)
     POSTFIX Expression                                Stack Contents
                                                      (Top to Bottom)
 34+6*                        Empty
-4+6*
-+6*
+4+6* 4 3
++6* 6 4 3
 6*
 *
