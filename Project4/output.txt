@@ -19,6 +19,9 @@ Empty                    83-5+                         Empty
     +                              5 5
      Empty                              10
 Empty                         Empty
+
+ORIGINAL EXPRESSION ADN THE ANSWER:
+            8-3+5 = 10
                          CONVERSION DISPLAY
 Infix Expression         POSTFIX Expression               Stack
 Contents                                               (Top to Bottom)
@@ -43,6 +46,9 @@ Contents                                               (Top to Bottom)
     -                              8 8
      Empty                              0
 Empty                         Empty
+
+ORIGINAL EXPRESSION ADN THE ANSWER:
+            8-(3+5) = 0
                          CONVERSION DISPLAY
 Infix Expression         POSTFIX Expression               Stack
 Contents                                               (Top to Bottom)
@@ -65,6 +71,9 @@ Empty                    345*+                         Empty
     +                              20 3
      Empty                              23
 Empty                         Empty
+
+ORIGINAL EXPRESSION ADN THE ANSWER:
+            3+4*5 = 23
                          CONVERSION DISPLAY
 Infix Expression         POSTFIX Expression               Stack
 Contents                                               (Top to Bottom)
@@ -91,6 +100,9 @@ Contents                                               (Top to Bottom)
       -                              2 21
        Empty                              19
 Empty                         Empty
+
+ORIGINAL EXPRESSION ADN THE ANSWER:
+            3*7-4/2 = 19
                          CONVERSION DISPLAY
 Infix Expression         POSTFIX Expression               Stack
 Contents                                               (Top to Bottom)
@@ -115,6 +127,9 @@ Contents                                               (Top to Bottom)
     *                              3 9
      Empty                              27
 Empty                         Empty
+
+ORIGINAL EXPRESSION ADN THE ANSWER:
+            (7+2)*3 = 27
                          CONVERSION DISPLAY
 Infix Expression         POSTFIX Expression               Stack
 Contents                                               (Top to Bottom)
@@ -139,6 +154,9 @@ Contents                                               (Top to Bottom)
     *                              -4 3
      Empty                              -12
 Empty                         Empty
+
+ORIGINAL EXPRESSION ADN THE ANSWER:
+            3*(2-6) = -12
                          CONVERSION DISPLAY
 Infix Expression         POSTFIX Expression               Stack
 Contents                                               (Top to Bottom)
@@ -169,6 +187,9 @@ Contents                                               (Top to Bottom)
       *                              2 5
        Empty                              10
 Empty                         Empty
+
+ORIGINAL EXPRESSION ADN THE ANSWER:
+            (2+3)*(6-4) = 10
                          CONVERSION DISPLAY
 Infix Expression         POSTFIX Expression               Stack
 Contents                                               (Top to Bottom)
@@ -207,6 +228,9 @@ Contents                                               (Top to Bottom)
           -                              17 56
            Empty                              39
 Empty                         Empty
+
+ORIGINAL EXPRESSION ADN THE ANSWER:
+            (3+4)*8-(7*3-4) = 39
                          CONVERSION DISPLAY
 Infix Expression         POSTFIX Expression               Stack
 Contents                                               (Top to Bottom)
@@ -253,6 +277,9 @@ Contents                                               (Top to Bottom)
                 +                              39 6
                  Empty                              45
 Empty                         Empty
+
+ORIGINAL EXPRESSION ADN THE ANSWER:
+            4*3/2+4*5*2-8/4/2 = 45
                          CONVERSION DISPLAY
 Infix Expression         POSTFIX Expression               Stack
 Contents                                               (Top to Bottom)
@@ -297,6 +324,9 @@ Contents                                               (Top to Bottom)
             +                              1 40
              Empty                              41
 Empty                         Empty
+
+ORIGINAL EXPRESSION ADN THE ANSWER:
+            5*((9/3+1)*(6-4))+1 = 41
                          CONVERSION DISPLAY
 Infix Expression         POSTFIX Expression               Stack
 Contents                                               (Top to Bottom)

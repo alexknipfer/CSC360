@@ -19,6 +19,7 @@ class StackClass
     void Print(string, ofstream &);
     void PrintEvaluationHeader(ofstream &);
     void PrintConversionHeader(ofstream &);
+    void PrintOriginalExpression(string, int, ofstream &);
     char RetrieveTop();
     bool IsEmpty(){return(TopPtr == NULL);}
     StackClass *GetTop(){return TopPtr;}
@@ -36,6 +37,7 @@ class StackClass
     char stackSymbol;
     int infixCount;
     int equationCount;
+    int answer;
 };
 
 //******************************************************************************
@@ -331,12 +333,6 @@ void StackClass::ProcessEquation(ifstream &inputFile, ofstream &outputFile)
       //print new postfix and stack
     Print(myEquation, outputFile);
     
-      //clear equation vector
-    myEquation.clear();
-    
-      //clear character vector for equation
-    equationChar.clear();
-    
       //reset infix count for next expression
     infixCount = 0;
     
@@ -347,6 +343,14 @@ void StackClass::ProcessEquation(ifstream &inputFile, ofstream &outputFile)
     
       //go evaluate the expression
     EvaluateExpression(outputFile);
+    
+    PrintOriginalExpression(myEquation, answer, outputFile);
+    
+      //clear equation vector
+    myEquation.clear();
+    
+      //clear character vector for equation
+    equationChar.clear();
     
       //clear the postfix expression for next equation
     postfixExpression.clear();
@@ -470,6 +474,20 @@ void StackClass::PrintEvaluationHeader(ofstream &outputFile)
   outputFile << "                         EVALUATION DISPLAY" << endl;
   outputFile << "    POSTFIX Expression                                Stack Contents" << endl;
   outputFile << "                                                     (Top to Bottom)" << endl;
+}
+
+//******************************************************************************
+
+void StackClass::PrintOriginalExpression(string equation, int answer, ofstream &outputFile)
+{
+    //Receives - original equation, answer, and output file
+    //Task - print the original equation and solution
+    //Returns - nothing
+    
+  outputFile << endl;
+  outputFile << "ORIGINAL EXPRESSION ADN THE ANSWER:" << endl;
+  outputFile << "            " << equation << " = " << answer;
+  outputFile << endl;
 }
 
 //******************************************************************************
@@ -619,6 +637,7 @@ void StackClass::EvaluateExpression(ofstream &outputFile)
         //check if expression is complete
       if(postfixExpression.size() == 0)
       {
+        answer = evaluation.top();
         evaluation.pop();
         outputFile << "Empty                         Empty";
       }
