@@ -9,7 +9,7 @@ using namespace std;
 
 //************* Create Stack Class *********************************************
 
-
+  //class for stack
 class StackClass
 {
   public:
@@ -18,6 +18,7 @@ class StackClass
     void Pop();
     void Print(string, ofstream &);
     void PrintEvaluationHeader(ofstream &);
+    void PrintConversionHeader(ofstream &);
     char RetrieveTop();
     bool IsEmpty(){return(TopPtr == NULL);}
     StackClass *GetTop(){return TopPtr;}
@@ -31,7 +32,7 @@ class StackClass
     vector<char> postfixExpression;
     vector <char> equationChar;
     vector <char> stackContents;
-    stack <char> evaluation;
+    stack <int> evaluation;
     char stackSymbol;
     int infixCount;
     int equationCount;
@@ -41,19 +42,19 @@ class StackClass
 
 int main()
 {
+    //create stack
   StackClass Stack;
-
+  
+    //create input and outputfile for data
   ifstream inputFile("data.txt");
   ofstream outputFile("output.txt");
 
-  outputFile << "                         CONVERSION DISPLAY" << endl;
-  outputFile << "Infix Expression         POSTFIX Expression               Stack" << endl;
-  outputFile << "Contents                                               (Top to Bottom)" << endl;
-  outputFile << endl;
+    //print conversion header
+  Stack.PrintEvaluationHeader(outputFile);
 
+    //process infix equation
   Stack.ProcessEquation(inputFile, outputFile);
 
-  //Stack.Print();
   return 0;
 }
 
@@ -61,6 +62,9 @@ int main()
 
 StackClass::StackClass()
 {
+    //Receives - nothing
+    //Task - Constructor - intializes pointers and count
+    //Returns - nothing
   TopPtr = NULL;
   next = NULL;
   infixCount = 0;
@@ -230,6 +234,8 @@ void StackClass::ProcessEquation(ifstream &inputFile, ofstream &outputFile)
     postfixExpression.clear();
     
     inputFile >> myEquation;
+    
+    PrintConversionHeader(outputFile);
 
           //store string read in into character vector for printing
     for(int x = 0; x < myEquation.length(); x++)
@@ -295,6 +301,16 @@ char StackClass::RetrieveTop()
 
 //******************************************************************************
 
+void StackClass::PrintConversionHeader(ofstream &outputFile)
+{
+  outputFile << "                         CONVERSION DISPLAY" << endl;
+  outputFile << "Infix Expression         POSTFIX Expression               Stack" << endl;
+  outputFile << "Contents                                               (Top to Bottom)" << endl;
+  outputFile << endl;
+}
+
+//******************************************************************************
+
 void StackClass::PrintEvaluationHeader(ofstream &outputFile)
 {
   outputFile << "                         EVALUATION DISPLAY" << endl;
@@ -310,6 +326,8 @@ void StackClass::EvaluateExpression(ofstream &outputFile)
   int count = 0;
   int firstVal;
   int secondVal;
+  int valTotal;
+  int spacing = 1;
   
   for(int x = 0; x < postfixExpression.size(); x++)
   {
@@ -317,41 +335,106 @@ void StackClass::EvaluateExpression(ofstream &outputFile)
   }
   
   outputFile << "                        Empty" << endl;
-  evaluation.push(postfixExpression.front());
-  stackContents.push_back(postfixExpression.front());
-  postfixExpression.erase(postfixExpression.begin());
-  
+
   while(!postfixExpression.empty())
   {
-    if(isdigit(postfixExpression[count]))
+    
+    for(int x = 0; x < spacing; x++)
     {
-      evaluation.push(postfixExpression[count]);
-      stackContents.push_back(postfixExpression[count]);
+      outputFile << " ";
+    }
+    
+    if(isdigit(postfixExpression[0]))
+    {
+      evaluation.push(postfixExpression[0] - '0');
+      stackContents.push_back(postfixExpression[0]);
+      postfixExpression.erase(postfixExpression.begin());
+      
       for(int y = 0; y < postfixExpression.size(); y++)
       {
         outputFile << right << postfixExpression[y];
       }
-      postfixExpression.erase(postfixExpression.begin());
-      for(int x = stackContents.size(); x --> 0;)
+      
+      outputFile << "                             ";
+      for (stack<int> dump = evaluation; !dump.empty(); dump.pop())
       {
-        outputFile << " " << stackContents[x];
+        outputFile << " " << dump.top();
       }
+
       outputFile << endl;
     }
     
     else
     {
-      for(int y = 0; y < postfixExpression.size(); y++)
+      
+      
+      switch(postfixExpression[0])
       {
-        outputFile << left << postfixExpression[y];
+        case '+': firstVal = evaluation.top();
+                  evaluation.pop();
+                  secondVal = evaluation.top();
+                  evaluation.pop();
+                  valTotal = secondVal + firstVal;
+                  evaluation.push(valTotal);
+                  break;
+                  
+        case '-': firstVal = evaluation.top();
+                  evaluation.pop();
+                  secondVal = evaluation.top();
+                  evaluation.pop();
+                  valTotal = secondVal - firstVal;
+                  evaluation.push(valTotal);
+                  break;
+                  
+        case '*': firstVal = evaluation.top();
+                  evaluation.pop();
+                  secondVal = evaluation.top();
+                  evaluation.pop();
+                  valTotal = secondVal * firstVal;
+                  evaluation.push(valTotal);
+                  break;
+                  
+        case '/': firstVal = evaluation.top();
+                  evaluation.pop();
+                  secondVal = evaluation.top();
+                  evaluation.pop();
+                  valTotal = secondVal / firstVal;
+                  evaluation.push(valTotal);
+                  break;
       }
+      
       postfixExpression.erase(postfixExpression.begin());
-      cout << postfixExpression[count] << endl;
+      
+      if(postfixExpression.size() == 0)
+      {
+        outputFile << "Empty";
+      }
+      
+      else
+      {
+        for(int y = 0; y < postfixExpression.size(); y++)
+        {
+          outputFile << left << postfixExpression[y];
+        }
+      }
+      
+      outputFile << "                             ";
+      
+      for (stack<int> dump = evaluation; !dump.empty(); dump.pop())
+      {
+        outputFile << " " << dump.top();
+      }
       outputFile << endl;
+      
+      if(postfixExpression.size() == 0)
+      {
+        evaluation.pop();
+        outputFile << "Empty                         Empty";
+      }
     }
-    count++;
+    spacing++;
   }
-  
+  outputFile << endl;
 }
 
 //******************************************************************************
