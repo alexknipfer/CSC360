@@ -3,6 +3,7 @@
 #include <iomanip>
 #include <cstring>
 #include <vector>
+#include <stack>
 
 using namespace std;
 
@@ -16,17 +17,21 @@ class StackClass
     void Push(char);
     void Pop();
     void Print(string, ofstream &);
+    void PrintEvaluationHeader(ofstream &);
     char RetrieveTop();
     bool IsEmpty(){return(TopPtr == NULL);}
     StackClass *GetTop(){return TopPtr;}
     bool IsFull();
     void ProcessEquation(ifstream &, ofstream &);
+    void EvaluateExpression(ofstream &);
     
   private:
     StackClass *TopPtr;
     StackClass *next;
     vector<char> postfixExpression;
     vector <char> equationChar;
+    vector <char> stackContents;
+    stack <char> evaluation;
     char stackSymbol;
     int infixCount;
     int equationCount;
@@ -215,11 +220,14 @@ void StackClass::ProcessEquation(ifstream &inputFile, ofstream &outputFile)
     popComplete = false;
     
     Print(myEquation, outputFile);
-    postfixExpression.clear();
     myEquation.clear();
     equationChar.clear();
     infixCount = 0;
     outputFile << endl;
+    
+    PrintEvaluationHeader(outputFile);
+    EvaluateExpression(outputFile);
+    postfixExpression.clear();
     
     inputFile >> myEquation;
 
@@ -283,6 +291,64 @@ char StackClass::RetrieveTop()
   topCharacter = TopPtr -> stackSymbol;
   
   return topCharacter;
+}
+
+//******************************************************************************
+
+void StackClass::PrintEvaluationHeader(ofstream &outputFile)
+{
+  outputFile << "                         EVALUATION DISPLAY" << endl;
+  outputFile << "    POSTFIX Expression                                Stack Contents" << endl;
+  outputFile << "                                                     (Top to Bottom)" << endl;
+}
+
+//******************************************************************************
+
+void StackClass::EvaluateExpression(ofstream &outputFile)
+{
+  bool evaluationComplete = false;
+  int count = 0;
+  int firstVal;
+  int secondVal;
+  
+  for(int x = 0; x < postfixExpression.size(); x++)
+  {
+    outputFile << postfixExpression[x];
+  }
+  
+  outputFile << "                        Empty" << endl;
+  evaluation.push(postfixExpression.front());
+  postfixExpression.erase(postfixExpression.begin());
+  
+  while(!postfixExpression.empty())
+  {
+    if(isdigit(postfixExpression[count]))
+    {
+      evaluation.push(postfixExpression[count]);
+      for(int y = 0; y < postfixExpression.size(); y++)
+      {
+        outputFile << right << postfixExpression[y];
+      }
+      postfixExpression.erase(postfixExpression.begin());
+      for(int x = 0; x < evaluation.size(); x++)
+      {
+        outputFile << " " << evaluation[x];
+      }
+      outputFile << endl;
+    }
+    
+    else
+    {
+      for(int y = 0; y < postfixExpression.size(); y++)
+      {
+        outputFile << left << postfixExpression[y];
+      }
+      postfixExpression.erase(postfixExpression.begin());
+      outputFile << endl;
+    }
+    count++;
+  }
+  
 }
 
 //******************************************************************************
@@ -359,80 +425,4 @@ void StackClass::Print(string equation, ofstream &outputFile)
   outputFile << endl;
   return;
 }
-
-
-/*void StackClass::Print(string equation, ofstream &outputFile)
-{
-  StackClass *current;
-  current = TopPtr;
-
-  if(equationCount == 0)
-  {
-        //print proper spacing to right align infix expression
-    for(int x = 5; x < infixCount; x++)
-    {
-      outputFile << " ";
-    }
-    outputFile << "Empty";
-  }
-  
-  else
-  {
-        //print proper spacing to right align infix expression
-    for(int x = 0; x < infixCount; x++)
-    {
-      outputFile << " ";
-    }
-    
-      //print infix expression
-    for(int x = infixCount; x < equationChar.size(); x++)
-    {
-      outputFile << equationChar[x];
-    }
-    
-   
-  }
-  
-    //if the postfix expression consists of nothing print empty
-  if(postfixExpression.empty())
-  {
-    outputFile << "                       Empty                       ";
-  }
-  
-    //print postfix expression vector
-  else
-  {
-      //create proper spacing before postfix expression
-    outputFile << "                       ";
-    for(int x = 0; x < postfixExpression.size(); x++)
-    {
-      outputFile << postfixExpression[x];
-    }
-    outputFile << "                             ";
-  }
-  
-    //if stack is empty print empty
-  if(IsEmpty())
-  {
-    outputFile << "Empty ";
-  }
-  
-    //print stack contents if it is not empty
-  else
-  {
-    while(current != NULL)
-    {
-      outputFile << left << current -> stackSymbol;
-      current = current -> next;
-    }
-  }
-  
-    //increment infix count for printing infix expression
-  if(equationCount != 0)
-  {
-    infixCount++;
-  }
-  outputFile << endl;
-  return;
-}*/
 
