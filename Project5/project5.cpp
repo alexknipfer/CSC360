@@ -54,6 +54,7 @@ class InventoryClass
     InventoryClass();
     void readData(ifstream &);
     void printData(ofstream &);
+    void sortQuantityOnHand();
   
   private:
     InventoryStruct inventoryData[50];
@@ -81,6 +82,21 @@ int main()
   outputFile << "--------   -----------------       --------  -------  -------  -------" << endl;
   
     //print intial inventory data
+  myInventory.printData(outputFile);
+  
+  outputFile << endl;
+  
+    //sort inventory array in descending order by quantity on hand
+  myInventory.sortQuantityOnHand();
+  
+    //print labels for printing inventory
+  outputFile << "The Inventory Array sorted in descending order according to the Quantity on Hand" << endl;
+  outputFile << "using the Bubble Sort:" << endl;
+  outputFile << "Inventory  Item                    Quantity  Reorder  Cost of  Selling " << endl;
+  outputFile << " Number    Description             on hand   Number   Item     Price" << endl;
+  outputFile << "--------   -----------------       --------  -------  -------  -------" << endl;
+  
+    //print inventory array
   myInventory.printData(outputFile);
  
   return 0;
@@ -126,6 +142,64 @@ void InventoryClass::readData(ifstream &inputFile)
     inventoryData[inventoryCount] = currentInventory;
     inventoryCount++;
     inputFile >> currentInventory.inventoryNumber;
+  }
+}
+
+//******************************************************************************
+
+void InventoryClass::sortQuantityOnHand()
+{
+    //Receives - nothing
+    //Task - sort inventory array by quantity on hand (descending order)
+    //Returns - nothing
+    
+    //create temp variables for all swaps
+  int tempInventoryNumber;
+  string tempItemDescription;
+  int tempQuantityOnHand;
+  int tempReorderNumber;
+  double tempCostOfItem;
+  double tempSellingPrice;
+  
+    //bubble sort the inventory array by quantity on hand (in descending order)
+  for(int x = 0; x < inventoryCount - 1; x++)
+  {
+    for(int y = 0; y < inventoryCount - 1; y++)
+    {
+        //check to see if current quantity on hand is less than the adjacent one
+      if(inventoryData[y].quantityOnHand < inventoryData[y + 1].quantityOnHand)
+      {
+          //swap inventory number
+        tempInventoryNumber = inventoryData[y].inventoryNumber;
+        inventoryData[y].inventoryNumber = inventoryData[y + 1].inventoryNumber;
+        inventoryData[y + 1].inventoryNumber = tempInventoryNumber;
+        
+          //swap item description
+        tempItemDescription = inventoryData[y].itemDescription;
+        inventoryData[y].itemDescription = inventoryData[y + 1].itemDescription;
+        inventoryData[y + 1].itemDescription = tempItemDescription;
+        
+          //swap quantity on hand
+        tempQuantityOnHand = inventoryData[y].quantityOnHand;
+        inventoryData[y].quantityOnHand = inventoryData[y + 1].quantityOnHand;
+        inventoryData[y + 1].quantityOnHand = tempQuantityOnHand;
+        
+          //swap reorder number
+        tempReorderNumber = inventoryData[y].reorderNumber;
+        inventoryData[y].reorderNumber = inventoryData[y + 1].reorderNumber;
+        inventoryData[y + 1].reorderNumber = tempReorderNumber;
+        
+          //swap cost of item
+        tempCostOfItem = inventoryData[y].costOfItem;
+        inventoryData[y].costOfItem = inventoryData[y + 1].costOfItem;
+        inventoryData[y + 1].costOfItem = tempCostOfItem;
+        
+          //swap selling price
+        tempSellingPrice = inventoryData[y].sellingPrice;
+        inventoryData[y].sellingPrice = inventoryData[y + 1].sellingPrice;
+        inventoryData[y + 1].sellingPrice = tempSellingPrice;
+      }
+    }
   }
 }
 
