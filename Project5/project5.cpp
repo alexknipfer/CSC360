@@ -19,12 +19,11 @@
 //*    USER DEFINED                                                            *
 //*     MODULES:       : printHeader - print program header                    *
 //*                      printFooter - print program footer                    *
-//*                      InsertCustomer - insert customer into list            *
-//*                      DeleteCustomer - remove customer from list            *
-//*                      ChangeCustomer - change customer data                 *
-//*                      InsertAsFirstElement - insert first customer          *
-//*                      PrintMailingList - print all customer in mailing list *
-//*                      isEmpty - check to see if mailing list is empty       *
+//*                      readData - reads in data from file into array         *
+//*                      printData - prints inventory array                    *
+//*                      sortQuantityOnHand - sorts array by quantity on hand  *
+//*                      sortSellingPrice - sorts array by selling price       *
+//*                      sortInventoryNumber - sorts array by inventory number *
 //******************************************************************************
 
 #include <iostream>
@@ -56,16 +55,24 @@ class InventoryClass
     void printData(ofstream &);
     void sortQuantityOnHand();
     void sortSellingPrice();
+    void sortInventoryNumber(int, int);
+    int inventoryCount;
   
   private:
     InventoryStruct inventoryData[50];
-    int inventoryCount;
+    
 };
+
+  //prototypes for header and footer
+void printHeader(ofstream &);
+void printFooter(ofstream &);
 
 //******************************************************************************
 
 int main()
 {
+  int first, last;
+  
     //instantiate inventory class
   InventoryClass myInventory;
   
@@ -73,8 +80,12 @@ int main()
   ifstream inputFile("data5.txt");
   ofstream outputFile("output.txt");
   
+    //print program header
+  printHeader(outputFile);
+  
     //read in inventory data from file
   myInventory.readData(inputFile);
+  
   
     //print labels for printing inventory
   outputFile << "The Original Inventory Array:" << endl;
@@ -113,6 +124,24 @@ int main()
   
     //print inventory array
   myInventory.printData(outputFile);
+  
+  outputFile << endl;
+  
+    //sort inventory array in ascending order by inventory number
+  myInventory.sortInventoryNumber(0, myInventory.inventoryCount - 1);
+  
+    //print labels for printing inventory
+  outputFile << "The Inventory Array sorted in ascending order according to the Inventory Number" << endl;
+  outputFile << "using the Quick Sort:" << endl;
+  outputFile << "Inventory  Item                    Quantity  Reorder  Cost of  Selling " << endl;
+  outputFile << " Number    Description             on hand   Number   Item     Price" << endl;
+  outputFile << "--------   -----------------       --------  -------  -------  -------" << endl;
+  
+    //print inventory array
+  myInventory.printData(outputFile);
+  
+    //print program footer
+  printFooter(outputFile);
  
   return 0;
 }
@@ -296,6 +325,88 @@ void InventoryClass::sortSellingPrice()
 
 //******************************************************************************
 
+void InventoryClass::sortInventoryNumber(int left, int right)
+{
+    //Receives - first and last bounds of inventory array
+    //Task - sort inventory array in ascending order by inventory number
+    //Returns - nothing
+  
+    //get bounds of array
+  int i = left, j = right;
+  
+    //temp variables for swapping
+  int tempInventoryNumber;
+  string tempItemDescription;
+  int tempQuantityOnHand;
+  int tempReorderNumber;
+  double tempCostOfItem;
+  double tempSellingPrice;
+  
+    //create pivot point (midpoint of array)
+  int pivot = inventoryData[(left + right) /2].inventoryNumber;
+  
+    //use the quicksort algorithm to sort by iventory number
+  while(i <= j)
+  {
+    while(inventoryData[i].inventoryNumber < pivot)
+      i++;
+    while(inventoryData[j].inventoryNumber > pivot)
+      j--;
+      
+      //test comparing values to see which one is larger
+      //sort in ascending order
+    if(i <= j)
+    {
+        //swap inventory numbers
+      tempInventoryNumber = inventoryData[i].inventoryNumber;
+      inventoryData[i].inventoryNumber = inventoryData[j].inventoryNumber;
+      inventoryData[j].inventoryNumber = tempInventoryNumber;
+      
+        //swap item descriptions
+      tempItemDescription = inventoryData[i].itemDescription;
+      inventoryData[i].itemDescription = inventoryData[j].itemDescription;
+      inventoryData[j].itemDescription = tempItemDescription;
+      
+        //swap quantity on hand values
+      tempQuantityOnHand = inventoryData[i].quantityOnHand;
+      inventoryData[i].quantityOnHand = inventoryData[j].quantityOnHand;
+      inventoryData[j].quantityOnHand = tempQuantityOnHand;
+      
+        //swap reorder numbers
+      tempReorderNumber = inventoryData[i].reorderNumber;
+      inventoryData[i].reorderNumber = inventoryData[j].reorderNumber;
+      inventoryData[j].reorderNumber = tempReorderNumber;
+      
+        //swap cost of item values
+      tempCostOfItem = inventoryData[i].costOfItem;
+      inventoryData[i].costOfItem = inventoryData[j].costOfItem;
+      inventoryData[j].costOfItem = tempCostOfItem;
+      
+        //swap selling prices
+      tempSellingPrice = inventoryData[i].sellingPrice;
+      inventoryData[i].sellingPrice = inventoryData[j].sellingPrice;
+      inventoryData[j].sellingPrice = tempSellingPrice;
+      
+      i++;
+      j--;
+    }
+  }
+  
+    //sort left partition
+  if(left < j)
+  {
+    sortInventoryNumber(left, j);
+  }
+  
+    //sort right partition
+  if(i < right)
+  {
+    sortInventoryNumber(i, right);
+  }
+}
+
+//******************************************************************************
+
 void InventoryClass::printData(ofstream &outputFile)
 {
     //Receives - output file
@@ -314,3 +425,37 @@ void InventoryClass::printData(ofstream &outputFile)
     outputFile << endl;
   }
 }
+
+//******************************************************************************
+
+void printHeader(ofstream &Outfile)
+{
+		// Receives - the output file
+		// Task- Prints the output preamble
+		// Returns - Nothing
+	Outfile << setw(30) << "Alex Knipfer ";
+	Outfile << setw(17) << "CSC 36000";
+	Outfile << setw(15) << "Section 11" << endl;
+	Outfile << setw(30) << "Spring 2016";
+	Outfile << setw(20) << "Assignment #5" << endl;
+	Outfile << setw(35) << "--------------------------------------";
+	Outfile << setw(35) << "--------------------------------------\n\n";
+	return;
+}
+
+//******************************************************************************
+
+void printFooter(ofstream &Outfile)
+{
+    //Receives - the output file
+    //Task - print output footer
+    //Returns- nothing
+	Outfile << endl;
+	Outfile << setw(35) << "--------------------------------" << endl;
+	Outfile << setw(35) << "|    END OF PROGRAM OUTPUT     |" << endl;
+	Outfile << setw(35) << "--------------------------------" << endl;
+
+	return;
+}
+
+//*********************** END OF PROGRAM ************************************//
