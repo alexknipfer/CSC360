@@ -11,7 +11,7 @@ struct StoreInfoStruct
   string name;
   int quantityOnHand;
   int quantityOnOrder;
-  
+
   StoreInfoStruct *Lptr;
   StoreInfoStruct *Rptr;
 };
@@ -28,7 +28,7 @@ class TreeClass
     void PatchParent(StoreInfoStruct &, StoreInfoStruct &, StoreInfoStruct &);
     StoreInfoStruct *GetRoot(){return Root;}
     void PrintInventoryHeader(ofstream &);
-      
+
   private:
     StoreInfoStruct *Root;
 };
@@ -40,12 +40,12 @@ int main()
   char opCode;
   StoreInfoStruct storeInfo;
   TreeClass Tree;
-  
+
   ifstream inputFile("data6.txt");
   ofstream outputFile("output.txt");
-  
+
   inputFile >> opCode;
-  
+
   while(opCode != 'Q')
   {
     switch(opCode)
@@ -59,7 +59,7 @@ int main()
                 inputFile >> storeInfo.quantityOnOrder;
                 Tree.Insert(storeInfo, outputFile);
                 break;
-                
+
       case 'P': inputFile >> opCode;
                 if(opCode == 'E')
                 {
@@ -70,7 +70,7 @@ int main()
     }
     inputFile >> opCode;
   }
-  
+
 
   return 0;
 }
@@ -91,9 +91,9 @@ void TreeClass::Insert(StoreInfoStruct storeInfo, ofstream &outputFile)
 {
   bool inserted = false;
   StoreInfoStruct *newPtr, *CurrPtr;
-  
+
   newPtr = new StoreInfoStruct;
-  
+
   if(newPtr != NULL)
   {
     newPtr -> id = storeInfo.id;
@@ -103,7 +103,7 @@ void TreeClass::Insert(StoreInfoStruct storeInfo, ofstream &outputFile)
     newPtr -> Lptr = NULL;
     newPtr -> Rptr = NULL;
     CurrPtr = Root;
-    
+
     while(inserted == false)
     {
       if (CurrPtr == NULL)
@@ -114,7 +114,7 @@ void TreeClass::Insert(StoreInfoStruct storeInfo, ofstream &outputFile)
 		    outputFile << "--------------------------------------------------------------------------" << endl;
         inserted = true;
 		  }
-		  
+
       else
 		  {
   		  if (storeInfo.id < CurrPtr -> id)
@@ -132,7 +132,7 @@ void TreeClass::Insert(StoreInfoStruct storeInfo, ofstream &outputFile)
             inserted = true;
   			  }
   			}
-  			
+
   			else if(storeInfo.id == CurrPtr -> id)
   			{
   			  outputFile << "ERROR --- Attempt to delete an item (" << storeInfo.id;
@@ -140,14 +140,14 @@ void TreeClass::Insert(StoreInfoStruct storeInfo, ofstream &outputFile)
   			  outputFile << "--------------------------------------------------------------------------" << endl;
   			  inserted = true;
   			}
-  			
+
         else
   			{
           if(CurrPtr -> Rptr != NULL)
   			  {
   			    CurrPtr = CurrPtr -> Rptr;
   			  }
-  			  
+
           else
   			  {
   			    CurrPtr -> Rptr = newPtr;
@@ -169,12 +169,12 @@ void TreeClass::TraverseInOrder(StoreInfoStruct *Root, ofstream &outputFile)
   if(Root != NULL)
   {
     TraverseInOrder(Root -> Lptr, outputFile);
-    
+
     outputFile << "  " << Root -> id;
     outputFile << setw(33) << Root -> name;
     outputFile << setw(15) << Root -> quantityOnHand;
     outputFile << setw(15) << Root -> quantityOnOrder << endl;
-    
+
     TraverseInOrder(Root -> Rptr, outputFile);
   }
 }
