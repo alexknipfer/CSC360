@@ -107,30 +107,30 @@ void TreeClass::Insert(StoreInfoStruct storeInfo, ofstream &outputFile)
     while(inserted == false)
     {
       if (CurrPtr == NULL)
-		  { 
+		  {
 		    Root = newPtr;
 		    outputFile << "Item ID Number " << storeInfo.id;
 		    outputFile << " successfully entered into the database." << endl;
 		    outputFile << "--------------------------------------------------------------------------" << endl;
         inserted = true;
-		  } 
+		  }
 		  
       else
-		  { 
-  		  if (storeInfo.id < CurrPtr -> id) 
-  		  {   
+		  {
+  		  if (storeInfo.id < CurrPtr -> id)
+  		  {
   		    if(CurrPtr -> Lptr != NULL )
-  			  { 
+  			  {
   			    CurrPtr = CurrPtr -> Lptr;
   			  }
-          else 
-  			  { 
+          else
+  			  {
   			    CurrPtr -> Lptr = newPtr;
   			    outputFile << "Item ID Number " << storeInfo.id;
   			    outputFile << " successfully entered into the database." << endl;
   			    outputFile << "--------------------------------------------------------------------------" << endl;
             inserted = true;
-  			  } 
+  			  }
   			}
   			
   			else if(storeInfo.id == CurrPtr -> id)
@@ -144,18 +144,19 @@ void TreeClass::Insert(StoreInfoStruct storeInfo, ofstream &outputFile)
         else
   			{
           if(CurrPtr -> Rptr != NULL)
-  			  { 
+  			  {
   			    CurrPtr = CurrPtr -> Rptr;
   			  }
-          else 
-  			  { 
+  			  
+          else
+  			  {
   			    CurrPtr -> Rptr = newPtr;
   			    outputFile << "Item ID Number " << storeInfo.id;
   			    outputFile << " successfully entered into the database." << endl;
   			    outputFile << "--------------------------------------------------------------------------" << endl;
             inserted = true;
   			  }
-  			} 
+  			}
 		  }
     }
   }
