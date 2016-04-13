@@ -6,4 +6,10 @@ I
 SP198
 Shovel              
 100 10
+I
+SP198
+Shovel              
+100 10
+P
+E
 Q

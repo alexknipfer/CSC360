@@ -22,11 +22,12 @@ class TreeClass
 {
   public:
     TreeClass(){Root = NULL;}
-    void Insert(StoreInfoStruct);
-    void TraverseInOrder(StoreInfoStruct *);
+    void Insert(StoreInfoStruct, ofstream &);
+    void TraverseInOrder(StoreInfoStruct *, ofstream &);
     void Delete(StoreInfoStruct &);
     void PatchParent(StoreInfoStruct &, StoreInfoStruct &, StoreInfoStruct &);
     StoreInfoStruct *GetRoot(){return Root;}
+    void PrintInventoryHeader(ofstream &);
       
   private:
     StoreInfoStruct *Root;
@@ -56,19 +57,37 @@ int main()
                 inputFile >> ws;
                 inputFile >> storeInfo.quantityOnHand;
                 inputFile >> storeInfo.quantityOnOrder;
-                Tree.Insert(storeInfo);
+                Tree.Insert(storeInfo, outputFile);
+                break;
+                
+      case 'P': inputFile >> opCode;
+                if(opCode == 'E')
+                {
+                  Tree.PrintInventoryHeader(outputFile);
+                  Tree.TraverseInOrder(Tree.GetRoot(), outputFile);
+                }
+                break;
     }
     inputFile >> opCode;
   }
   
-  Tree.TraverseInOrder(Tree.GetRoot());
-  
+
   return 0;
 }
 
 //******************************************************************************
 
-void TreeClass::Insert(StoreInfoStruct storeInfo)
+void TreeClass::PrintInventoryHeader(ofstream &outputFile)
+{
+  outputFile << "             JAKE'S HARDWARE INVENTORY REPORT" << endl;
+  outputFile <<"     Item           Item                         Quantity       Quantity "<< endl;
+  outputFile <<"    ID Number       Description                  On Hand        On Order "<< endl;
+  outputFile << "--------------------------------------------------------------------------" << endl;
+}
+
+//******************************************************************************
+
+void TreeClass::Insert(StoreInfoStruct storeInfo, ofstream &outputFile)
 {
   bool inserted = false;
   StoreInfoStruct *newPtr, *CurrPtr;
@@ -90,6 +109,9 @@ void TreeClass::Insert(StoreInfoStruct storeInfo)
       if (CurrPtr == NULL)
 		  { 
 		    Root = newPtr;
+		    outputFile << "Item ID Number " << storeInfo.id;
+		    outputFile << " successfully entered into the database." << endl;
+		    outputFile << "--------------------------------------------------------------------------" << endl;
         inserted = true;
 		  } 
 		  
@@ -104,9 +126,21 @@ void TreeClass::Insert(StoreInfoStruct storeInfo)
           else 
   			  { 
   			    CurrPtr -> Lptr = newPtr;
+  			    outputFile << "Item ID Number " << storeInfo.id;
+  			    outputFile << " successfully entered into the database." << endl;
+  			    outputFile << "--------------------------------------------------------------------------" << endl;
             inserted = true;
   			  } 
   			}
+  			
+  			else if(storeInfo.id == CurrPtr -> id)
+  			{
+  			  outputFile << "ERROR --- Attempt to delete an item (" << storeInfo.id;
+  			  outputFile << ") not in the database list." << endl;
+  			  outputFile << "--------------------------------------------------------------------------" << endl;
+  			  inserted = true;
+  			}
+  			
         else
   			{
           if(CurrPtr -> Rptr != NULL)
@@ -116,6 +150,9 @@ void TreeClass::Insert(StoreInfoStruct storeInfo)
           else 
   			  { 
   			    CurrPtr -> Rptr = newPtr;
+  			    outputFile << "Item ID Number " << storeInfo.id;
+  			    outputFile << " successfully entered into the database." << endl;
+  			    outputFile << "--------------------------------------------------------------------------" << endl;
             inserted = true;
   			  }
   			} 
@@ -126,13 +163,18 @@ void TreeClass::Insert(StoreInfoStruct storeInfo)
 
 //******************************************************************************
 
-void TreeClass::TraverseInOrder(StoreInfoStruct *Root)
+void TreeClass::TraverseInOrder(StoreInfoStruct *Root, ofstream &outputFile)
 {
   if(Root != NULL)
   {
-    TraverseInOrder(Root -> Lptr);
-    cout << Root -> id << endl;
-    TraverseInOrder(Root -> Rptr);
+    TraverseInOrder(Root -> Lptr, outputFile);
+    
+    outputFile << "  " << Root -> id;
+    outputFile << setw(33) << Root -> name;
+    outputFile << setw(15) << Root -> quantityOnHand;
+    outputFile << setw(15) << Root -> quantityOnOrder << endl;
+    
+    TraverseInOrder(Root -> Rptr, outputFile);
   }
 }
 
