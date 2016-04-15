@@ -24,7 +24,7 @@ class TreeClass
     TreeClass(){Root = NULL;}
     void Insert(StoreInfoStruct, ofstream &);
     void TraverseInOrder(StoreInfoStruct *, ofstream &);
-    void Delete(StoreInfoStruct &);
+    void Delete(StoreInfoStruct &, ofstream &);
     void PatchParent(StoreInfoStruct *, StoreInfoStruct *, StoreInfoStruct *);
     StoreInfoStruct *GetRoot(){return Root;}
     void PrintInventoryHeader(ofstream &);
@@ -65,7 +65,7 @@ int main()
                 inputFile >> ws;
                 getline(inputFile, storeInfo.name);
                 inputFile >> ws;
-                Tree.Delete(storeInfo);
+                Tree.Delete(storeInfo, outputFile);
                 break;
 
       case 'P': inputFile >> opCode;
@@ -143,8 +143,8 @@ void TreeClass::Insert(StoreInfoStruct storeInfo, ofstream &outputFile)
 
   			else if(storeInfo.id == CurrPtr -> id)
   			{
-  			  outputFile << "ERROR --- Attempt to delete an item (" << storeInfo.id;
-  			  outputFile << ") not in the database list." << endl;
+  			  outputFile << "ERROR --- Attempt to insert a duplicate item (" << storeInfo.id;
+  			  outputFile << ") into the database." << endl;
   			  outputFile << "--------------------------------------------------------------------------" << endl;
   			  inserted = true;
   			}
@@ -172,7 +172,7 @@ void TreeClass::Insert(StoreInfoStruct storeInfo, ofstream &outputFile)
 
 //******************************************************************************
 
-void TreeClass::Delete(StoreInfoStruct &infoToDelete)
+void TreeClass::Delete(StoreInfoStruct &infoToDelete, ofstream &outputFile)
 {
   StoreInfoStruct *delNode, *parNode, *StrNull, *node1, *node2, *node3;
   
@@ -186,6 +186,8 @@ void TreeClass::Delete(StoreInfoStruct &infoToDelete)
   {
     if(infoToDelete.id == delNode -> id)
     {
+      outputFile << "Item ID Number (" << infoToDelete.id;
+      outputFile << ") successfully deleted from the database." << endl;
       found = true;
     }
     else
@@ -204,7 +206,8 @@ void TreeClass::Delete(StoreInfoStruct &infoToDelete)
   
   if(found == false)
   {
-    cout << "NODE NOT IN TREE!!" << endl;
+    outputFile << "ERROR --- Attempt to delete an item (" << infoToDelete.id;
+    outputFile << ") not in the database list" << endl;
   }
   else
   {
