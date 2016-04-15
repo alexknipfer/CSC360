@@ -11,8 +11,11 @@ SP198
 Shovel              
 100 10
 D
+SP198
+Shovel
+P
+N
 LM674
-Lawn Mower 3/4 hp
 P
 E
 Q

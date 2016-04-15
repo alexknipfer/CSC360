@@ -28,6 +28,7 @@ class TreeClass
     void PatchParent(StoreInfoStruct *, StoreInfoStruct *, StoreInfoStruct *);
     StoreInfoStruct *GetRoot(){return Root;}
     void PrintInventoryHeader(ofstream &);
+    void PrintItem(string, ofstream &);
 
   private:
     StoreInfoStruct *Root;
@@ -40,6 +41,7 @@ int main()
   char opCode;
   StoreInfoStruct storeInfo;
   TreeClass Tree;
+  string idToPrint;
 
   ifstream inputFile("data6.txt");
   ofstream outputFile("output.txt");
@@ -73,6 +75,13 @@ int main()
                 {
                   Tree.PrintInventoryHeader(outputFile);
                   Tree.TraverseInOrder(Tree.GetRoot(), outputFile);
+                }
+                else if(opCode == 'N')
+                {
+                  inputFile >> ws;
+                  getline(inputFile, idToPrint);
+                  inputFile >> ws;
+                  Tree.PrintItem(idToPrint, outputFile);
                 }
                 break;
     }
@@ -209,6 +218,7 @@ void TreeClass::Delete(StoreInfoStruct &infoToDelete, ofstream &outputFile)
     outputFile << "ERROR --- Attempt to delete an item (" << infoToDelete.id;
     outputFile << ") not in the database list" << endl;
   }
+  
   else
   {
     if(delNode -> Lptr == NULL)
@@ -286,6 +296,40 @@ void TreeClass::TraverseInOrder(StoreInfoStruct *Root, ofstream &outputFile)
     outputFile << setw(15) << Root -> quantityOnOrder << endl;
 
     TraverseInOrder(Root -> Rptr, outputFile);
+  }
+}
+
+//******************************************************************************
+
+void TreeClass::PrintItem(string id, ofstream &outputFile)
+{
+  StoreInfoStruct *foundNode, *parNode;
+  
+  bool found = false;
+  
+  foundNode = Root;
+  parNode = NULL;
+
+  while((found == false) && (foundNode != NULL))
+  {
+    //cout << foundNode -> id << endl;
+    if(id == foundNode -> id)
+    {
+      cout << "PRINT SUCCESSFUL" << endl;
+      found = true;
+    }
+    else
+    {
+      parNode = foundNode;
+      if(id < foundNode -> id)
+      {
+        foundNode = foundNode -> Lptr;
+      }
+      else
+      {
+        foundNode = foundNode -> Rptr;
+      }
+    }
   }
 }
 
