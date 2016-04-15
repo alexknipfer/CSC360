@@ -25,7 +25,7 @@ class TreeClass
     void Insert(StoreInfoStruct, ofstream &);
     void TraverseInOrder(StoreInfoStruct *, ofstream &);
     void Delete(StoreInfoStruct &);
-    void PatchParent(StoreInfoStruct &, StoreInfoStruct &, StoreInfoStruct &);
+    void PatchParent(StoreInfoStruct *, StoreInfoStruct *, StoreInfoStruct *);
     StoreInfoStruct *GetRoot(){return Root;}
     void PrintInventoryHeader(ofstream &);
 
@@ -58,6 +58,14 @@ int main()
                 inputFile >> storeInfo.quantityOnHand;
                 inputFile >> storeInfo.quantityOnOrder;
                 Tree.Insert(storeInfo, outputFile);
+                break;
+                
+      case 'D': inputFile >> ws;
+                getline(inputFile, storeInfo.id);
+                inputFile >> ws;
+                getline(inputFile, storeInfo.name);
+                inputFile >> ws;
+                Tree.Delete(storeInfo);
                 break;
 
       case 'P': inputFile >> opCode;
@@ -158,6 +166,105 @@ void TreeClass::Insert(StoreInfoStruct storeInfo, ofstream &outputFile)
   			  }
   			}
 		  }
+    }
+  }
+}
+
+//******************************************************************************
+
+void TreeClass::Delete(StoreInfoStruct &infoToDelete)
+{
+  StoreInfoStruct *delNode, *parNode, *StrNull, *node1, *node2, *node3;
+  
+  bool found = false;
+  
+  delNode = Root;
+  parNode = NULL;
+  StrNull = NULL;
+  
+  while((found == false) && (delNode != NULL))
+  {
+    if(infoToDelete.id == delNode -> id)
+    {
+      found = true;
+    }
+    else
+    {
+      parNode = delNode;
+      if(infoToDelete.id < delNode -> id)
+      {
+        delNode = delNode -> Lptr;
+      }
+      else
+      {
+        delNode = delNode -> Rptr;
+      }
+    }
+  }
+  
+  if(found == false)
+  {
+    cout << "NODE NOT IN TREE!!" << endl;
+  }
+  else
+  {
+    if(delNode -> Lptr == NULL)
+    {
+      if(delNode -> Rptr == NULL)
+      {
+        PatchParent(StrNull, parNode, delNode);
+      }
+      else
+      {
+        PatchParent(delNode -> Rptr, parNode, delNode);
+      }
+    }
+    else
+    {
+      if(delNode -> Rptr == NULL)
+      {
+        PatchParent(delNode -> Lptr, parNode, delNode);
+      }
+      else
+      {
+        node1 = delNode;
+        node2 = delNode -> Lptr;
+        node3 = node2 -> Rptr;
+        while(node3 != NULL)
+        {
+          node1 = node2;
+          node2 = node3;
+          node3 = node2 -> Rptr;
+        }
+        if(node1 != delNode)
+        {
+          node1 -> Rptr = node2 -> Lptr;
+          node2 -> Lptr = delNode -> Lptr;
+        }
+        node2 -> Rptr = delNode -> Rptr;
+        PatchParent(node2, parNode, delNode);
+      } //end else
+    } //end else
+  } //end else
+}
+
+//******************************************************************************
+
+void TreeClass::PatchParent(StoreInfoStruct *NewParNode, StoreInfoStruct *parNode, StoreInfoStruct *delNode)
+{
+  if(parNode == NULL)
+  {
+    Root = NewParNode;
+  }
+  else
+  {
+    if(parNode -> Lptr == delNode)
+    {
+      parNode -> Lptr = NewParNode;
+    }
+    else
+    {
+      parNode -> Rptr = NewParNode;
     }
   }
 }
