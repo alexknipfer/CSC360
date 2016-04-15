@@ -81,6 +81,7 @@ int main()
                   inputFile >> ws;
                   getline(inputFile, idToPrint);
                   inputFile >> ws;
+                  Tree.PrintInventoryHeader(outputFile);
                   Tree.PrintItem(idToPrint, outputFile);
                 }
                 break;
@@ -303,19 +304,22 @@ void TreeClass::TraverseInOrder(StoreInfoStruct *Root, ofstream &outputFile)
 
 void TreeClass::PrintItem(string id, ofstream &outputFile)
 {
-  StoreInfoStruct *foundNode, *parNode;
+  StoreInfoStruct *foundNode, *parNode, *node1, *node2, *node3, *StrNull;
   
   bool found = false;
   
   foundNode = Root;
   parNode = NULL;
+  StrNull = NULL;
 
   while((found == false) && (foundNode != NULL))
   {
-    //cout << foundNode -> id << endl;
     if(id == foundNode -> id)
     {
-      cout << "PRINT SUCCESSFUL" << endl;
+      outputFile << " " << foundNode -> id;
+      outputFile << setw(33) << foundNode -> name;
+      outputFile << setw(15) << foundNode -> quantityOnHand;
+      outputFile << setw(15) << foundNode -> quantityOnOrder << endl;
       found = true;
     }
     else
@@ -331,5 +335,11 @@ void TreeClass::PrintItem(string id, ofstream &outputFile)
       }
     }
   }
+  
+  if(found == false)
+  {
+    outputFile << "Item (" << id << ") not in database. Print failed." << endl;
+  }
+
 }
 

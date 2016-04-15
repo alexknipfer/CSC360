@@ -4,9 +4,15 @@ Item ID Number SP198 successfully entered into the database.
 --------------------------------------------------------------------------
 ERROR --- Attempt to insert a duplicate item (SP198) into the database.
 --------------------------------------------------------------------------
-Item ID Number (SP198) successfully deleted from the database.
+             JAKE'S HARDWARE INVENTORY REPORT
+     Item           Item                         Quantity       Quantity 
+    ID Number       Description                  On Hand        On Order 
+--------------------------------------------------------------------------
+ SP198             Shovel                          100             10
              JAKE'S HARDWARE INVENTORY REPORT
      Item           Item                         Quantity       Quantity 
     ID Number       Description                  On Hand        On Order 
 --------------------------------------------------------------------------
   LM677             Lawn Mower 3/4 hp                25              5
+  SP198             Shovel                          100             10
+ERROR --- Attempt to delete an item (SP19) not in the database list
