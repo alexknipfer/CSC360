@@ -13,9 +13,11 @@ Shovel
 P
 N
 SP198
+S
+SP198
+10
 P
 E
-D
-SP19
-Shovel
+P
+E
 Q
