@@ -30,6 +30,8 @@ class TreeClass
     void PrintInventoryHeader(ofstream &);
     void PrintItem(string, ofstream &);
     void AdjustInventoryOnHand(string, int, ofstream &);
+    void AdjustInventoryOnOrder(string, int, ofstream &);
+    void AdjustQuantityReceived(string, int, ofstream &);
 
   private:
     StoreInfoStruct *Root;
@@ -46,8 +48,10 @@ int main()
   string idToPrint;
   string idToUpdate;
   int quantOnHand;
+  int quantOnOrder;
+  int quantReceived;
 
-  ifstream inputFile("data6.txt");
+  ifstream inputFile("tree.in");
   ofstream outputFile("output.txt");
 
   inputFile >> opCode;
@@ -85,15 +89,33 @@ int main()
                   inputFile >> ws;
                   getline(inputFile, idToPrint);
                   inputFile >> ws;
-                  Tree.PrintInventoryHeader(outputFile);
                   Tree.PrintItem(idToPrint, outputFile);
                 }
                 break;
+                
       case 'S': inputFile >> ws;
                 getline(inputFile, idToUpdate);
                 inputFile >> ws;
                 inputFile >> quantOnHand;
                 Tree.AdjustInventoryOnHand(idToUpdate, quantOnHand, outputFile);
+                break;
+                
+      case 'O': inputFile >> ws;
+                getline(inputFile, idToUpdate);
+                inputFile >> ws;
+                inputFile >> quantOnOrder;
+                inputFile >> ws;
+                Tree.AdjustInventoryOnOrder(idToUpdate, quantOnOrder, outputFile);
+                break;
+                
+      case 'R': inputFile >> ws;
+                getline(inputFile, idToUpdate);
+                inputFile >> ws;
+                inputFile >> quantReceived;
+                inputFile >> ws;
+                Tree.AdjustQuantityReceived(idToUpdate, quantReceived, outputFile);
+                break;
+                
     }
     inputFile >> opCode;
   }
@@ -308,10 +330,6 @@ void TreeClass::TraverseInOrder(StoreInfoStruct *Root, ofstream &outputFile)
     outputFile << setw(15) << Root -> quantityOnOrder << endl;
     
     TraverseInOrder(Root -> Rptr, outputFile);
-    for(int x = 0; x < 10; x++)
-    {
-      outputFile << endl;
-    }
   }
 }
 
@@ -331,6 +349,7 @@ void TreeClass::PrintItem(string id, ofstream &outputFile)
   {
     if(id == foundNode -> id)
     {
+      PrintInventoryHeader(outputFile);
       outputFile << " " << foundNode -> id;
       outputFile << setw(33) << foundNode -> name;
       outputFile << setw(15) << foundNode -> quantityOnHand;
@@ -381,6 +400,91 @@ void TreeClass::AdjustInventoryOnHand(string id, int quantity, ofstream &outputF
       foundNode -> quantityOnHand -= quantity;
       outputFile << "Quantity on Hand for item (" << id;
       outputFile << ") successfully updated." << endl;
+      outputFile << "--------------------------------------------------------------------------" << endl;
+      found = true;
+    }
+    else
+    {
+      parNode = foundNode;
+      if(id < foundNode -> id)
+      {
+        foundNode = foundNode -> Lptr;
+      }
+      else
+      {
+        foundNode = foundNode -> Rptr;
+      }
+    }
+  }
+  
+  if(found == false)
+  {
+    outputFile << "Item (" << id << ") not in database. Data not updated." << endl;
+    outputFile << "--------------------------------------------------------------------------" << endl;
+  }
+}
+
+//******************************************************************************
+
+void TreeClass::AdjustInventoryOnOrder(string id, int quantity, ofstream &outputFile)
+{
+  StoreInfoStruct *foundNode, *parNode, *node1, *node2, *node3, *StrNull;
+  
+  bool found = false;
+  
+  foundNode = Root;
+  parNode = NULL;
+  StrNull = NULL;
+
+  while((found == false) && (foundNode != NULL))
+  {
+    if(id == foundNode -> id)
+    {
+      foundNode -> quantityOnOrder += quantity;
+      outputFile << "Quantity on Order for item (" << id;
+      outputFile << ") successfully updated." << endl;
+      outputFile << "--------------------------------------------------------------------------" << endl;
+      found = true;
+    }
+    else
+    {
+      parNode = foundNode;
+      if(id < foundNode -> id)
+      {
+        foundNode = foundNode -> Lptr;
+      }
+      else
+      {
+        foundNode = foundNode -> Rptr;
+      }
+    }
+  }
+  
+  if(found == false)
+  {
+    outputFile << "Item (" << id << ") not in database. Data not updated." << endl;
+    outputFile << "--------------------------------------------------------------------------" << endl;
+  }
+}
+
+void TreeClass::AdjustQuantityReceived(string id, int quantity, ofstream &outputFile)
+{
+  StoreInfoStruct *foundNode, *parNode, *node1, *node2, *node3, *StrNull;
+  
+  bool found = false;
+  
+  foundNode = Root;
+  parNode = NULL;
+  StrNull = NULL;
+
+  while((found == false) && (foundNode != NULL))
+  {
+    if(id == foundNode -> id)
+    {
+      foundNode -> quantityOnOrder -= quantity;
+      foundNode -> quantityOnHand += quantity;
+      outputFile << "Item ID Number " << id << " successfully updated with ";
+      outputFile << quantity << " items added to the database." << endl;
       outputFile << "--------------------------------------------------------------------------" << endl;
       found = true;
     }
