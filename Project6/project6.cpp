@@ -5,6 +5,7 @@
 
 using namespace std;
 
+  //structure for holding store database inventory
 struct StoreInfoStruct
 {
   string id;
@@ -18,6 +19,7 @@ struct StoreInfoStruct
 
 //******************************************************************************
 
+  //class for inventory data (binary tree)
 class TreeClass
 {
   public:
@@ -45,21 +47,26 @@ int main()
   StoreInfoStruct storeInfo;
   TreeClass Tree;
   
+    //new values read in for inventory
   string idToPrint;
   string idToUpdate;
   int quantOnHand;
   int quantOnOrder;
   int quantReceived;
 
+    //create input and output files for data
   ifstream inputFile("tree.in");
   ofstream outputFile("output.txt");
 
+    //read in initial op code to figure out what to do with data
   inputFile >> opCode;
 
+    //continue reading in data until sentinel of "Q" is reached
   while(opCode != 'Q')
   {
     switch(opCode)
     {
+        //if op code is "I", insert item into tree (insert into database)
       case 'I': inputFile >> ws;
                 getline(inputFile, storeInfo.id);
                 inputFile >> ws;
@@ -69,7 +76,8 @@ int main()
                 inputFile >> storeInfo.quantityOnOrder;
                 Tree.Insert(storeInfo, outputFile);
                 break;
-                
+        
+        //if op code is "D", delete item from tree (from database)        
       case 'D': inputFile >> ws;
                 getline(inputFile, storeInfo.id);
                 inputFile >> ws;
@@ -78,12 +86,17 @@ int main()
                 Tree.Delete(storeInfo, outputFile);
                 break;
 
+        //if op code is "P", print all or 1 item from tree (from database)
       case 'P': inputFile >> opCode;
+      
+                  //if op code is "E", print all items in tree (database)
                 if(opCode == 'E')
                 {
                   Tree.PrintInventoryHeader(outputFile);
                   Tree.TraverseInOrder(Tree.GetRoot(), outputFile);
                 }
+                
+                  //if op code is "N", read in item to print
                 else if(opCode == 'N')
                 {
                   inputFile >> ws;
@@ -92,14 +105,16 @@ int main()
                   Tree.PrintItem(idToPrint, outputFile);
                 }
                 break;
-                
+      
+        //if op code is "S", update on hand count          
       case 'S': inputFile >> ws;
                 getline(inputFile, idToUpdate);
                 inputFile >> ws;
                 inputFile >> quantOnHand;
                 Tree.AdjustInventoryOnHand(idToUpdate, quantOnHand, outputFile);
                 break;
-                
+      
+        //if op code is "O", update on order count          
       case 'O': inputFile >> ws;
                 getline(inputFile, idToUpdate);
                 inputFile >> ws;
@@ -107,7 +122,8 @@ int main()
                 inputFile >> ws;
                 Tree.AdjustInventoryOnOrder(idToUpdate, quantOnOrder, outputFile);
                 break;
-                
+        
+        //if op code is "R", update quantity receives count        
       case 'R': inputFile >> ws;
                 getline(inputFile, idToUpdate);
                 inputFile >> ws;
@@ -115,8 +131,9 @@ int main()
                 inputFile >> ws;
                 Tree.AdjustQuantityReceived(idToUpdate, quantReceived, outputFile);
                 break;
-                
     }
+    
+      //read in next op code
     inputFile >> opCode;
   }
 
@@ -128,6 +145,11 @@ int main()
 
 void TreeClass::PrintInventoryHeader(ofstream &outputFile)
 {
+    //Receives - output files
+    //Task - print header for inventory
+    //Returns - nothing
+  
+    //output inventory header to file
   outputFile << "             JAKE'S HARDWARE INVENTORY REPORT" << endl;
   outputFile <<"     Item           Item                         Quantity       Quantity "<< endl;
   outputFile <<"    ID Number       Description                  On Hand        On Order "<< endl;
@@ -138,68 +160,102 @@ void TreeClass::PrintInventoryHeader(ofstream &outputFile)
 
 void TreeClass::Insert(StoreInfoStruct storeInfo, ofstream &outputFile)
 {
+    //Receives - inventory structure, output file
+    //Task - insert an item into the tree (into the database)
+    //Returns - nothing
+    
   bool inserted = false;
   StoreInfoStruct *newPtr, *CurrPtr;
 
+    //allocate space for pointer
   newPtr = new StoreInfoStruct;
 
+    //make sure enough space is available
   if(newPtr != NULL)
   {
+      //point to the values needed to be inserted
     newPtr -> id = storeInfo.id;
     newPtr -> name = storeInfo.name;
     newPtr -> quantityOnHand = storeInfo.quantityOnHand;
     newPtr -> quantityOnOrder = storeInfo.quantityOnOrder;
+    
+      //set left and right pointers (left and right subtrees) to null
     newPtr -> Lptr = NULL;
     newPtr -> Rptr = NULL;
     CurrPtr = Root;
 
+      //continue going until inserted successfully
     while(inserted == false)
     {
+        //check to see if item needs to be added as root
       if (CurrPtr == NULL)
 		  {
+		      //reset root
 		    Root = newPtr;
+		    
+		      //output message showing item has been added
 		    outputFile << "Item ID Number " << storeInfo.id;
 		    outputFile << " successfully entered into the database." << endl;
 		    outputFile << "--------------------------------------------------------------------------" << endl;
+		    
+		      //reset inserted to exit loop
         inserted = true;
 		  }
 
+        //if not at the root, do the following
       else
 		  {
+		      //check to see if ID is greater or less than root to place "in-order"
   		  if (storeInfo.id < CurrPtr -> id)
   		  {
+  		      //make sure the left pointer isn't null
   		    if(CurrPtr -> Lptr != NULL )
   			  {
+  			      //reset current pointer
   			    CurrPtr = CurrPtr -> Lptr;
   			  }
+  			  
+  			    //if it was null, then item can be added in location and is successfully inserted
           else
   			  {
   			    CurrPtr -> Lptr = newPtr;
+  			    
+  			      //output message showing item has been added
   			    outputFile << "Item ID Number " << storeInfo.id;
   			    outputFile << " successfully entered into the database." << endl;
   			    outputFile << "--------------------------------------------------------------------------" << endl;
             inserted = true;
   			  }
   			}
-
+  
+          //check to see if item already exists
   			else if(storeInfo.id == CurrPtr -> id)
   			{
+  			    //print error message since item already exists in tree (database)
   			  outputFile << "ERROR --- Attempt to insert a duplicate item (" << storeInfo.id;
   			  outputFile << ") into the database." << endl;
   			  outputFile << "--------------------------------------------------------------------------" << endl;
+  			  
+  			    //reset value to exit loop
   			  inserted = true;
   			}
 
+          //check right side of tree (right pointer)
         else
   			{
+  			    //if it's not null go to next location
           if(CurrPtr -> Rptr != NULL)
   			  {
+  			      //scan to next location
   			    CurrPtr = CurrPtr -> Rptr;
   			  }
 
+            //if null item can be added
           else
   			  {
   			    CurrPtr -> Rptr = newPtr;
+  			    
+  			      //print message showing item has been added
   			    outputFile << "Item ID Number " << storeInfo.id;
   			    outputFile << " successfully entered into the database." << endl;
   			    outputFile << "--------------------------------------------------------------------------" << endl;
@@ -215,26 +271,40 @@ void TreeClass::Insert(StoreInfoStruct storeInfo, ofstream &outputFile)
 
 void TreeClass::Delete(StoreInfoStruct &infoToDelete, ofstream &outputFile)
 {
+    //Receives - inventory structure, output file,
+    //Task - delete node from tree (delete item from database)
+    //Returns - nothing
+    
   StoreInfoStruct *delNode, *parNode, *StrNull, *node1, *node2, *node3;
   
   bool found = false;
   
+    //set initial pointer values
   delNode = Root;
   parNode = NULL;
   StrNull = NULL;
   
+    //keep scanning until item is found (or not found)
   while((found == false) && (delNode != NULL))
   {
+      //if the ID is found print deleted message
     if(infoToDelete.id == delNode -> id)
     {
+        //print message item was successfully removed
       outputFile << "Item ID Number (" << infoToDelete.id;
       outputFile << ") successfully deleted from the database." << endl;
       outputFile << "--------------------------------------------------------------------------" << endl;
+      
+        //reset value to exit loop
       found = true;
     }
+    
+      //scan to next item in tree
     else
     {
       parNode = delNode;
+      
+        //check to see if ID is different than the one to be deleted
       if(infoToDelete.id < delNode -> id)
       {
         delNode = delNode -> Lptr;
@@ -246,13 +316,16 @@ void TreeClass::Delete(StoreInfoStruct &infoToDelete, ofstream &outputFile)
     }
   }
   
+    //item was not found in database
   if(found == false)
   {
+      //print error message because item to be deleted wasn't found
     outputFile << "ERROR --- Attempt to delete an item (" << infoToDelete.id;
     outputFile << ") not in the database list" << endl;
     outputFile << "--------------------------------------------------------------------------" << endl;
   }
   
+    //delete the node from tree
   else
   {
     if(delNode -> Lptr == NULL)
