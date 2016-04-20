@@ -1,3 +1,7 @@
+                 Alex Knipfer         CSC 36000     Section 11
+                   Spring 2016       Assignment #6
+----------------------------------------------------------------------------
+
 Item ID Number LM677 successfully entered into the database.
 --------------------------------------------------------------------------
 Item ID Number SP198 successfully entered into the database.
@@ -101,3 +105,7 @@ Item ID Number (FG081) successfully deleted from the database.
   TM567             Tape Measure 10ft               122             28
   WA022             Washers 1/2 inch                398            122
   WB202             Wheel Barrow                     23              7
+
+   --------------------------------
+   |    END OF PROGRAM OUTPUT     |
+   --------------------------------

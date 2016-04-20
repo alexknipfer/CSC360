@@ -1,3 +1,34 @@
+//******************  PROGRAM IDENTIFICATION  **********************************
+//*                                                                            *
+//*  PROGRAM FILE NAME: project6.cpp  ASSIGNMENT #:  6    GRADE: _____         *
+//*   	                                                                       *
+//*  PROGRAM AUTHOR:   ____________________________________                    *
+//*                             Alex Knipfer                                   *
+//*                                                                            *
+//*  COURSE #:   CSC 36000 11             DUE DATE: April 22, 2015             *
+//*                                                                            * 
+//******************************************************************************
+
+
+//********************* PROGRAM DESCRIPTION ************************************
+//*    Process: This program employs a binary tree to store and print          *
+//*             information on a store's database inventory.                   *
+//*                                                                            *
+//*    USER DEFINED                                                            *
+//*     MODULES:       : printHeader - print program header                    *
+//*                      printFooter - print program footer                    *
+//*                      Insert - insert item into database (tree)             *
+//*                      TraverseInOrder - traverse tree in order              *
+//*                      Delete - delete item from database (tree)             *
+//*                      PatchParent - restructure tree after delete           *
+//*                      GetRoot - get's root of tree                          *
+//*                      PrintInventoryHeader - prints header for inventory    *
+//*                      PrintItem - prints individual item                    *
+//*                      AdjustInventoryOnHand - updates on hand quantity      *
+//*                      AdjustInventoryOnOrder - updates on order quantity    *
+//*                      AdjustQuantityReceived - updates quantity received    *
+//******************************************************************************
+
 #include <iostream>
 #include <fstream>
 #include <iomanip>
@@ -39,6 +70,10 @@ class TreeClass
     StoreInfoStruct *Root;
 };
 
+  //prototypes for header and footer
+void printHeader(ofstream &);
+void printFooter(ofstream &);
+
 //******************************************************************************
 
 int main()
@@ -57,6 +92,9 @@ int main()
     //create input and output files for data
   ifstream inputFile("tree.in");
   ofstream outputFile("output.txt");
+  
+    //print program header
+  printHeader(outputFile);
 
     //read in initial op code to figure out what to do with data
   inputFile >> opCode;
@@ -137,6 +175,8 @@ int main()
     inputFile >> opCode;
   }
 
+    //print program footer
+  printFooter(outputFile);
 
   return 0;
 }
@@ -677,4 +717,38 @@ void TreeClass::AdjustQuantityReceived(string id, int quantity, ofstream &output
     outputFile << "--------------------------------------------------------------------------" << endl;
   }
 }
+
+//******************************************************************************
+
+void printHeader(ofstream &Outfile)
+{
+		// Receives - the output file
+		// Task- Prints the output preamble
+		// Returns - Nothing
+	Outfile << setw(30) << "Alex Knipfer ";
+	Outfile << setw(17) << "CSC 36000";
+	Outfile << setw(15) << "Section 11" << endl;
+	Outfile << setw(30) << "Spring 2016";
+	Outfile << setw(20) << "Assignment #6" << endl;
+	Outfile << setw(35) << "--------------------------------------";
+	Outfile << setw(35) << "--------------------------------------\n\n";
+	return;
+}
+
+//******************************************************************************
+
+void printFooter(ofstream &Outfile)
+{
+    //Receives - the output file
+    //Task - print output footer
+    //Returns- nothing
+	Outfile << endl;
+	Outfile << setw(35) << "--------------------------------" << endl;
+	Outfile << setw(35) << "|    END OF PROGRAM OUTPUT     |" << endl;
+	Outfile << setw(35) << "--------------------------------" << endl;
+
+	return;
+}
+
+//*********************** END OF PROGRAM *************************************//
 
