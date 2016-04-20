@@ -328,23 +328,30 @@ void TreeClass::Delete(StoreInfoStruct &infoToDelete, ofstream &outputFile)
     //delete the node from tree
   else
   {
+      //check to see if node to delete has left or right subtrees
     if(delNode -> Lptr == NULL)
     {
       if(delNode -> Rptr == NULL)
       {
+          //node to delete has no children
         PatchParent(StrNull, parNode, delNode);
       }
       else
       {
+          //node to delete has one right child
         PatchParent(delNode -> Rptr, parNode, delNode);
       }
     }
+    
     else
     {
+        //node to be deleted has one left child
       if(delNode -> Rptr == NULL)
       {
         PatchParent(delNode -> Lptr, parNode, delNode);
       }
+      
+        //node to be deleted has two children
       else
       {
         node1 = delNode;
@@ -372,16 +379,23 @@ void TreeClass::Delete(StoreInfoStruct &infoToDelete, ofstream &outputFile)
 
 void TreeClass::PatchParent(StoreInfoStruct *NewParNode, StoreInfoStruct *parNode, StoreInfoStruct *delNode)
 {
+    //Receives - new parent node, parent node, and deleted node (to be deleted)
+    //Task - restructure tree properly after node has been deleted
+    //Returns - nothing
+    
+    //check parent node, reset root to parent
   if(parNode == NULL)
   {
     Root = NewParNode;
   }
   else
   {
+      //reset nodes for deletion
     if(parNode -> Lptr == delNode)
     {
       parNode -> Lptr = NewParNode;
     }
+      //reset parent node for deletion
     else
     {
       parNode -> Rptr = NewParNode;
@@ -393,15 +407,23 @@ void TreeClass::PatchParent(StoreInfoStruct *NewParNode, StoreInfoStruct *parNod
 
 void TreeClass::TraverseInOrder(StoreInfoStruct *Root, ofstream &outputFile)
 {
+    //Receives - root node, output file
+    //Task - traverse the tree in order (go through inventory in database)
+    //Returns - nothing
+    
+    //check root to make sure not null to loop through tree
   if(Root != NULL)
   {
+      //recursive call to traverse to continue printing
     TraverseInOrder(Root -> Lptr, outputFile);
 
+      //process and print node (print inventory data in database)
     outputFile << "  " << Root -> id;
     outputFile << setw(33) << Root -> name;
     outputFile << setw(15) << Root -> quantityOnHand;
     outputFile << setw(15) << Root -> quantityOnOrder << endl;
     
+      //recursive call to traverse to continue printing
     TraverseInOrder(Root -> Rptr, outputFile);
   }
 }
@@ -410,32 +432,50 @@ void TreeClass::TraverseInOrder(StoreInfoStruct *Root, ofstream &outputFile)
 
 void TreeClass::PrintItem(string id, ofstream &outputFile)
 {
+    //Receives - ID to be printed, output file
+    //Task - print specific item given ID
+    //Returns - nothing
+    
   StoreInfoStruct *foundNode, *parNode, *node1, *node2, *node3, *StrNull;
   
   bool found = false;
   
+    //initialize pointers
   foundNode = Root;
   parNode = NULL;
   StrNull = NULL;
 
+    //make sure item wasn't found yet, continue until found (or not found)
   while((found == false) && (foundNode != NULL))
   {
+      //item was found in database
     if(id == foundNode -> id)
     {
+        //print header for inventory data
       PrintInventoryHeader(outputFile);
+      
+        //output the inventory data to file
       outputFile << " " << foundNode -> id;
       outputFile << setw(33) << foundNode -> name;
       outputFile << setw(15) << foundNode -> quantityOnHand;
       outputFile << setw(15) << foundNode -> quantityOnOrder << endl;
+      
+        //create proper spacing for pages
       for(int x = 0; x < 10; x++)
       {
         outputFile << endl;
       }
+      
+        //reset value since item was found
       found = true;
     }
+    
+      //item wasn't found
     else
     {
       parNode = foundNode;
+      
+        //search next item in database to see if it exists
       if(id < foundNode -> id)
       {
         foundNode = foundNode -> Lptr;
@@ -447,8 +487,10 @@ void TreeClass::PrintItem(string id, ofstream &outputFile)
     }
   }
   
+    //item wasn't found
   if(found == false)
   {
+      //output error message since item didn't exist
     outputFile << "Item (" << id << ") not in database. Print failed." << endl;
     outputFile << "--------------------------------------------------------------------------" << endl;
   }
@@ -458,27 +500,43 @@ void TreeClass::PrintItem(string id, ofstream &outputFile)
 
 void TreeClass::AdjustInventoryOnHand(string id, int quantity, ofstream &outputFile)
 {
+    //Receives - ID, quantity to adjust, output file
+    //Task - Update inventory on hand to the inventory ID given with the quantity given
+    //Returns - nothing
+    
   StoreInfoStruct *foundNode, *parNode, *node1, *node2, *node3, *StrNull;
   
   bool found = false;
   
+    //initialize pointers
   foundNode = Root;
   parNode = NULL;
   StrNull = NULL;
 
+    //continue searching until item was found (or not found)
   while((found == false) && (foundNode != NULL))
   {
+      //item was found
     if(id == foundNode -> id)
     {
+        //update quantity on hand by subtracting given quantity
       foundNode -> quantityOnHand -= quantity;
+      
+        //output success message for the update
       outputFile << "Quantity on Hand for item (" << id;
       outputFile << ") successfully updated." << endl;
       outputFile << "--------------------------------------------------------------------------" << endl;
+      
+        //reset value since item was found
       found = true;
     }
+    
+      //item wasn't found yet...
     else
     {
       parNode = foundNode;
+      
+        //continue searching in database (tree) for item
       if(id < foundNode -> id)
       {
         foundNode = foundNode -> Lptr;
@@ -490,8 +548,10 @@ void TreeClass::AdjustInventoryOnHand(string id, int quantity, ofstream &outputF
     }
   }
   
+    //item was NOT found
   if(found == false)
   {
+      //output error message since item didn't exist
     outputFile << "Item (" << id << ") not in database. Data not updated." << endl;
     outputFile << "--------------------------------------------------------------------------" << endl;
   }
@@ -501,27 +561,43 @@ void TreeClass::AdjustInventoryOnHand(string id, int quantity, ofstream &outputF
 
 void TreeClass::AdjustInventoryOnOrder(string id, int quantity, ofstream &outputFile)
 {
+    //Receives - ID, quantity to be updated, output file
+    //Task - ukpdate inventory on order with given quantity to given ID
+    //Returns - nothing
+    
   StoreInfoStruct *foundNode, *parNode, *node1, *node2, *node3, *StrNull;
   
   bool found = false;
   
+    //initialize pointers
   foundNode = Root;
   parNode = NULL;
   StrNull = NULL;
 
+    //continue searching until item was found (or not found)
   while((found == false) && (foundNode != NULL))
   {
+      //item was found
     if(id == foundNode -> id)
     {
+        //update quantity on order by adding given quantity
       foundNode -> quantityOnOrder += quantity;
+      
+        //output success message for the update
       outputFile << "Quantity on Order for item (" << id;
       outputFile << ") successfully updated." << endl;
       outputFile << "--------------------------------------------------------------------------" << endl;
+      
+        //reset value since item was found
       found = true;
     }
+    
+      //item wasn't found yet...
     else
     {
       parNode = foundNode;
+      
+        //continue searching in database (tree) for item
       if(id < foundNode -> id)
       {
         foundNode = foundNode -> Lptr;
@@ -533,37 +609,55 @@ void TreeClass::AdjustInventoryOnOrder(string id, int quantity, ofstream &output
     }
   }
   
+    //item was NOT found
   if(found == false)
   {
+      //output error message since item didn't exist
     outputFile << "Item (" << id << ") not in database. Data not updated." << endl;
     outputFile << "--------------------------------------------------------------------------" << endl;
   }
 }
 
+//******************************************************************************
+
 void TreeClass::AdjustQuantityReceived(string id, int quantity, ofstream &outputFile)
 {
+    //Receives - ID, quantity to be updated, output file
+    //Task - updates quantity received with given quantity to given ID
+    //Returns - nothing
+    
   StoreInfoStruct *foundNode, *parNode, *node1, *node2, *node3, *StrNull;
   
   bool found = false;
   
+    //intialize pointers
   foundNode = Root;
   parNode = NULL;
   StrNull = NULL;
 
+    //continue searching until item was found (or not found)
   while((found == false) && (foundNode != NULL))
   {
+      //item was found
     if(id == foundNode -> id)
     {
+        //update quantity received by subtracting on order and adding on hand
       foundNode -> quantityOnOrder -= quantity;
       foundNode -> quantityOnHand += quantity;
+      
+        //output success message
       outputFile << "Item ID Number " << id << " successfully updated with ";
       outputFile << quantity << " items added to the database." << endl;
       outputFile << "--------------------------------------------------------------------------" << endl;
       found = true;
     }
+    
+      //item wasn't found yet...
     else
     {
       parNode = foundNode;
+      
+        //continue searching in database (tree) for item
       if(id < foundNode -> id)
       {
         foundNode = foundNode -> Lptr;
@@ -575,8 +669,10 @@ void TreeClass::AdjustQuantityReceived(string id, int quantity, ofstream &output
     }
   }
   
+    //item was NOT found
   if(found == false)
   {
+      //output error message since item didn't exist
     outputFile << "Item (" << id << ") not in database. Data not updated." << endl;
     outputFile << "--------------------------------------------------------------------------" << endl;
   }
