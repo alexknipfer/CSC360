@@ -1,0 +1,13 @@
+                 Alex Knipfer         CSC 36000     Section 11
+                   Spring 2016       Assignment #6
+----------------------------------------------------------------------------
+
+             JAKE'S HARDWARE INVENTORY REPORT
+     Item           Item                         Quantity       Quantity 
+    ID Number       Description                  On Hand        On Order 
+--------------------------------------------------------------------------
+  LM677             Lawn Mower 3/4 hp                25              5
+
+   --------------------------------
+   |    END OF PROGRAM OUTPUT     |
+   --------------------------------
