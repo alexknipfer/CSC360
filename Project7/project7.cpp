@@ -267,104 +267,154 @@ void TreeClass::Delete(StoreInfoStruct &infoToDelete, ofstream &outputFile)
     //Task - delete node from tree (delete item from database)
     //Returns - nothing
     
-  StoreInfoStruct *delNode, *parNode, *StrNull, *node1, *node2, *node3;
-  
   bool found = false;
+  StoreInfoStruct *delnode, *parnode, *node1, *node2, *node3;
   
-    //set initial pointer values
-  delNode = Root;
-  parNode = NULL;
-  StrNull = NULL;
+  delnode = Root;
   
-    //keep scanning until item is found (or not found)
-  while((found == false) && (delNode != NULL))
+  while(found == false && delnode != NULL && delnode -> thread != 1)
   {
-      //if the ID is found print deleted message
-    if(infoToDelete.id == delNode -> id)
+    if(infoToDelete.id == delnode -> id)
     {
-        //print message item was successfully removed
-      outputFile << "Item ID Number (" << infoToDelete.id;
-      outputFile << ") successfully deleted from the database." << endl;
-      outputFile << "--------------------------------------------------------------------------" << endl;
-      
-        //reset value to exit loop
+      cout << "Item deleted successfully" << endl;
       found = true;
     }
-    
-      //scan to next item in tree
     else
     {
-      parNode = delNode;
-      
-        //check to see if ID is different than the one to be deleted
-      if(infoToDelete.id < delNode -> id)
+      parnode = delnode;
+      if(infoToDelete.id < delnode -> id)
       {
-        delNode = delNode -> Lptr;
+        delnode = delnode -> Lptr;
       }
       else
       {
-        delNode = delNode -> Rptr;
+        delnode = delnode -> Rptr;
       }
     }
   }
   
-    //item was not found in database
   if(found == false)
   {
-      //print error message because item to be deleted wasn't found
-    outputFile << "ERROR --- Attempt to delete an item (" << infoToDelete.id;
-    outputFile << ") not in the database list" << endl;
-    outputFile << "--------------------------------------------------------------------------" << endl;
+    cout << "Item to delete doesn't exist!" << endl;
+    return;
   }
   
-    //delete the node from tree
-  else
+  if((delnode -> Lptr == NULL) && ((delnode -> Rptr == NULL) || (delnode -> thread == 1)))
   {
-      //check to see if node to delete has left or right subtrees
-    if(delNode -> Lptr == NULL)
+    if(parnode == NULL)
     {
-      if(delNode -> Rptr == NULL)
+      Root = NULL;
+    }
+    else
+    {
+      if(parnode -> Lptr == delnode)
       {
-          //node to delete has no children
-        PatchParent(StrNull, parNode, delNode);
+        parnode -> Lptr = NULL;
       }
       else
       {
-          //node to delete has one right child
-        PatchParent(delNode -> Rptr, parNode, delNode);
+        parnode -> Rptr = delnode -> Rptr;
+        parnode -> thread = 1;
+      }
+    }
+    return;
+  }
+  
+  if((delnode -> Lptr == NULL) && ((delnode -> Rptr != NULL) || (delnode -> thread == 0)))
+  {
+    if(parnode == NULL)
+    {
+      Root = delnode -> Rptr;
+    }
+    else
+    {
+      if(parnode -> Lptr = delnode)
+      {
+        parnode -> Lptr = delnode -> Rptr;
+      }
+      else
+      {
+        parnode -> Rptr = delnode -> Rptr;
+      }
+    }
+    return;
+  }
+  
+  if((delnode -> Lptr != NULL) && ((delnode -> Rptr == NULL) || (delnode -> thread == 1)))
+  {
+    if(parnode == NULL)
+    {
+      Root = delnode -> Lptr;
+    }
+    else
+    {
+      if(parnode -> Lptr == delnode)
+      {
+        parnode -> Lptr = delnode -> Lptr;
+      }
+      else
+      {
+        parnode -> Rptr = delnode -> Lptr;
+      }
+    }
+    node1 = delnode -> Lptr;
+    while((node1 -> Rptr != NULL) && (node1 -> thread != 1))
+    {
+      node1 = node1 -> Rptr;
+    }
+    node1 -> Rptr = delnode -> Rptr;
+    return;
+  }
+  
+  if((delnode -> Lptr != NULL) && (delnode -> Rptr != NULL) && (delnode -> thread == 0))
+  {
+    node1 = delnode;
+    node2 = delnode -> Lptr;
+    node3 = delnode -> Lptr;
+    
+    while((node3 != NULL) && (node3 -> thread != 1))
+    {
+      node2 = node3;
+      node3 = node3 -> Rptr;
+    }
+    
+    if(parnode == NULL)
+    {
+      Root = node3;
+    }
+    else
+    {
+      if(parnode -> Lptr == delnode)
+      {
+        parnode -> Lptr = node3;
+      }
+      else
+      {
+        parnode -> Rptr = node3;
       }
     }
     
-    else
+    if((node3 -> Lptr != NULL) && (node2 != node3))
     {
-        //node to be deleted has one left child
-      if(delNode -> Rptr == NULL)
-      {
-        PatchParent(delNode -> Lptr, parNode, delNode);
-      }
-      
-        //node to be deleted has two children
-      else
-      {
-        node1 = delNode;
-        node2 = delNode -> Lptr;
-        node3 = node2 -> Rptr;
-        while(node3 != NULL)
-        {
-          node1 = node2;
-          node2 = node3;
-          node3 = node2 -> Rptr;
-        }
-        if(node1 != delNode)
-        {
-          node1 -> Rptr = node2 -> Lptr;
-          node2 -> Lptr = delNode -> Lptr;
-        }
-        node2 -> Rptr = delNode -> Rptr;
-        PatchParent(node2, parNode, delNode);
-      } //end else
-    } //end else
-  } //end else
+      node2 -> Rptr = node3 -> Lptr;
+      node3 -> Lptr = delnode -> Lptr;
+      node3 -> Rptr = delnode -> Rptr;
+      node3 -> thread = 0;
+    }
+    else if(node2 == node3)
+    {
+      node3 -> Rptr = delnode -> Rptr;
+      node3 -> thread = 0;
+    }
+    else if(node2 -> Rptr != NULL)
+    {
+      node2 -> Rptr = node3;
+      node2 -> thread = 1;
+      node3 -> Lptr = delnode -> Lptr;
+      node3 -> Rptr = delnode -> Rptr;
+      node3 -> thread = 0;
+    }
+  }
 }
 
 //******************************************************************************
