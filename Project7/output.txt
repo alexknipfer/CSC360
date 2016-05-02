@@ -6,7 +6,34 @@
      Item           Item                         Quantity       Quantity 
     ID Number       Description                  On Hand        On Order 
 --------------------------------------------------------------------------
+  FT088             Fertilizer 25lb Bag              75             30
   LM677             Lawn Mower 3/4 hp                25              5
+  SP198             Shovel                          100             10
+ERROR --- Attempt to delete an item (CS882) not in the database list
+--------------------------------------------------------------------------
+ERROR --- Attempt to delete an item (GC119) not in the database list
+--------------------------------------------------------------------------
+Item (SB993) not in database. Data not updated.
+--------------------------------------------------------------------------
+Item (RK552) not in database. Data not updated.
+--------------------------------------------------------------------------
+Item (GH332) not in database. Data not updated.
+--------------------------------------------------------------------------
+Item (GC119) not in database. Print failed.
+--------------------------------------------------------------------------
+ERROR --- Attempt to delete an item (SP198) not in the database list
+--------------------------------------------------------------------------
+Item (FG081) not in database. Print failed.
+--------------------------------------------------------------------------
+ERROR --- Attempt to delete an item (FG081) not in the database list
+--------------------------------------------------------------------------
+             JAKE'S HARDWARE INVENTORY REPORT
+     Item           Item                         Quantity       Quantity 
+    ID Number       Description                  On Hand        On Order 
+--------------------------------------------------------------------------
+  FT088             Fertilizer 25lb Bag              75             30
+  LM677             Lawn Mower 3/4 hp                25              5
+  SP198             Shovel                          100             10
 
    --------------------------------
    |    END OF PROGRAM OUTPUT     |
