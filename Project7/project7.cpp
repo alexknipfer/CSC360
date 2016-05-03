@@ -223,6 +223,12 @@ void TreeClass::Insert(StoreInfoStruct storeInfo, StoreInfoStruct *newPtr, ofstr
         newPtr -> quantityOnHand = storeInfo.quantityOnHand;
         newPtr -> quantityOnOrder = storeInfo.quantityOnOrder;
         Root = newPtr;
+        
+          //output message showing item has been added
+		    outputFile << "Item ID Number " << storeInfo.id;
+		    outputFile << " successfully entered into the database." << endl;
+		    outputFile << "--------------------------------------------------------------------------" << endl;
+		    
         return;
     }
     
@@ -231,7 +237,7 @@ void TreeClass::Insert(StoreInfoStruct storeInfo, StoreInfoStruct *newPtr, ofstr
       newPtr -> name = storeInfo.name;
       newPtr -> quantityOnHand = storeInfo.quantityOnHand;
       newPtr -> quantityOnOrder = storeInfo.quantityOnOrder;
-      ParentNode = Root;
+      //ParentNode = Root;
         
       while(Inserted != 1)
       {
@@ -246,6 +252,12 @@ void TreeClass::Insert(StoreInfoStruct storeInfo, StoreInfoStruct *newPtr, ofstr
                   ParentNode -> Lptr = newPtr;
                   newPtr -> Rptr = ParentNode;
                   newPtr -> thread = 1;
+                  
+                              //output message showing item has been added
+          		    outputFile << "Item ID Number " << storeInfo.id;
+          		    outputFile << " successfully entered into the database." << endl;
+          		    outputFile << "--------------------------------------------------------------------------" << endl;
+          		    
                   Inserted = 1;
               }
           }
@@ -261,10 +273,16 @@ void TreeClass::Insert(StoreInfoStruct storeInfo, StoreInfoStruct *newPtr, ofstr
                   ParentNode -> Rptr = newPtr;
                   ParentNode -> thread = 0;
                   newPtr -> thread = 1;
+                  
+                              //output message showing item has been added
+          		    outputFile << "Item ID Number " << storeInfo.id;
+          		    outputFile << " successfully entered into the database." << endl;
+          		    outputFile << "--------------------------------------------------------------------------" << endl;
+          		    
                   Inserted = 1;
               }
           }
-          return;
+          
       }
     }
 
@@ -508,15 +526,53 @@ void TreeClass::PrintItem(string id, ofstream &outputFile)
     //Task - print specific item given ID
     //Returns - nothing
     
-  StoreInfoStruct *foundNode, *parNode;
+  StoreInfoStruct *CurrPtr, *parNode;
+  int RightThread;
   
   bool found = false;
   
     //initialize pointers
-  foundNode = Root;
+  CurrPtr = Root;
   parNode = NULL;
+  
+  while(CurrPtr -> Lptr != NULL)
+        CurrPtr = CurrPtr -> Lptr;
+        
+    while(CurrPtr != NULL && found == false)
+    {
+          if(CurrPtr -> id == id)
+          {
+                    //print header for inventory data
+            PrintInventoryHeader(outputFile);
+            
+              //output the inventory data to file
+            outputFile << " " << foundNode -> id;
+            outputFile << setw(33) << foundNode -> name;
+            outputFile << setw(15) << foundNode -> quantityOnHand;
+            outputFile << setw(15) << foundNode -> quantityOnOrder << endl;
+            found == true;
+          }
+        
+        RightThread = CurrPtr -> thread;
+        CurrPtr = CurrPtr -> Rptr;
+        
+        if((CurrPtr != NULL) && (RightThread == 0))
+        {
+            while(CurrPtr -> Lptr != NULL)
+            {
+                CurrPtr = CurrPtr -> Lptr;
+            }
+        }
+    }
+    
+    if(found ==  false)
+    {
+      outputFile << "Item (" << id << ") not in database. Print failed." << endl;
+      outputFile << "--------------------------------------------------------------------------" << endl;
+      return;
+    }
 
-  while((found == false) && (foundNode != NULL) && (foundNode -> thread != 1))
+  /*while((found == false) && (foundNode != NULL) && (foundNode -> thread != 1))
   {
     if(id == foundNode -> id)
     {
@@ -550,7 +606,7 @@ void TreeClass::PrintItem(string id, ofstream &outputFile)
     outputFile << "Item (" << id << ") not in database. Print failed." << endl;
     outputFile << "--------------------------------------------------------------------------" << endl;
     return;
-  }
+  }*/
 }
 
 //******************************************************************************
