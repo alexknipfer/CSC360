@@ -43,15 +43,17 @@ ERROR --- Attempt to delete an item (CS882) not in the database list
 --------------------------------------------------------------------------
 Item ID Number TM567 successfully entered into the database.
 --------------------------------------------------------------------------
-Item ID Number SP198 successfully entered into the database.
+ERROR --- Attempt to insert a duplicate item (SP198) into the database.
 --------------------------------------------------------------------------
 Item ID Number (GC119) successfully deleted from the database.
 --------------------------------------------------------------------------
-Item (SB993) not in database. Data not updated.
+Quantity on Hand for item (SB993) successfully updated.
 --------------------------------------------------------------------------
-Item (RK552) not in database. Data not updated.
+Item ID Number RK552 successfully updated with 20 items added to the database.
 --------------------------------------------------------------------------
-Item (GH332) not in database. Data not updated.
+Quantity on Order for item (GH332) successfully updated.
+--------------------------------------------------------------------------
+Item (GC119) not in database. Print failed.
 --------------------------------------------------------------------------
 Item ID Number WB202 successfully entered into the database.
 --------------------------------------------------------------------------
@@ -61,6 +63,11 @@ Item ID Number DP199 successfully entered into the database.
 --------------------------------------------------------------------------
 Item ID Number (SP198) successfully deleted from the database.
 --------------------------------------------------------------------------
+             JAKE'S HARDWARE INVENTORY REPORT
+     Item           Item                         Quantity       Quantity 
+    ID Number       Description                  On Hand        On Order 
+--------------------------------------------------------------------------
+ FG081             Fence Gate                       11              4
 Item ID Number RG555 successfully entered into the database.
 --------------------------------------------------------------------------
 Item ID Number NG111 successfully entered into the database.
@@ -77,16 +84,15 @@ ERROR --- Attempt to delete an item (FG081) not in the database list
   DR777             Drill 1/2 hp                     16             34
   FG081             Fence Gate                       11              4
   FT088             Fertilizer 25lb Bag              75             30
-  GH332             Garden Hose 50ft                 50              0
+  GH332             Garden Hose 50ft                 50             50
   HM222             Hammer                          187             13
   LB532             Light Bulb 75 watt              309            181
   LM677             Lawn Mower 3/4 hp                25              5
   NG111             Nail Gun                         28              2
   RG555             Garden Rake                      16              9
-  RK552             Leaf Rake                        34             26
+  RK552             Leaf Rake                        54              6
   SA333             Sander 1/2 hp                    33              2
-  SB993             Snow Blower                      12              3
-  SP198             Snow Shovel                       6             14
+  SB993             Snow Blower                       9              3
   TM567             Tape Measure 10ft               122             28
   WA022             Washers 1/2 inch                398            122
   WB202             Wheel Barrow                     23              7
