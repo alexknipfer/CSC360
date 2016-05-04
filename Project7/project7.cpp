@@ -1,17 +1,17 @@
 //******************  PROGRAM IDENTIFICATION  **********************************
 //*                                                                            *
-//*  PROGRAM FILE NAME: project6.cpp  ASSIGNMENT #:  6    GRADE: _____         *
+//*  PROGRAM FILE NAME: project7.cpp  ASSIGNMENT #:  7    GRADE: _____         *
 //*   	                                                                       *
 //*  PROGRAM AUTHOR:   ____________________________________                    *
 //*                             Alex Knipfer                                   *
 //*                                                                            *
-//*  COURSE #:   CSC 36000 11             DUE DATE: April 22, 2015             *
+//*  COURSE #:   CSC 36000 11             DUE DATE: May 06, 2015               *
 //*                                                                            * 
 //******************************************************************************
 
 
 //********************* PROGRAM DESCRIPTION ************************************
-//*    Process: This program employs a binary tree to store and print          *
+//*    Process: This program employs a threaded binary tree to store and print *
 //*             information on a store's database inventory.                   *
 //*                                                                            *
 //*    USER DEFINED                                                            *
@@ -791,7 +791,7 @@ void printHeader(ofstream &Outfile)
 	Outfile << setw(17) << "CSC 36000";
 	Outfile << setw(15) << "Section 11" << endl;
 	Outfile << setw(30) << "Spring 2016";
-	Outfile << setw(20) << "Assignment #6" << endl;
+	Outfile << setw(20) << "Assignment #7" << endl;
 	Outfile << setw(35) << "--------------------------------------";
 	Outfile << setw(35) << "--------------------------------------\n\n";
 	return;

@@ -1,5 +1,5 @@
                  Alex Knipfer         CSC 36000     Section 11
-                   Spring 2016       Assignment #6
+                   Spring 2016       Assignment #7
 ----------------------------------------------------------------------------
 
 Item ID Number LM677 successfully entered into the database.
